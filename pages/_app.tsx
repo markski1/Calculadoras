@@ -11,7 +11,7 @@ function App({ Component, pageProps }: AppProps) {
     <>
         <Link href="/" style={{textDecoration: 'none'}}>
           <h1 className={styles.title}>
-              <span className={styles.text_accent}>Calculadoras Argentinas</span>
+              <span className={styles.text_accent}>Calculadora Argentina</span>
           </h1>
         </Link>
         <Transition>

@@ -18,12 +18,12 @@ export default function Home() {
                 <div className={styles.grid}>
                     <Link href="impuestos" className={styles.card}>
                         <h3>Impuestos</h3>
-                        <p>Calculos de impuestos para pagos con tarjeta  hacia el exterior.</p>
+                        <p>Calculo de impuestos para pagos con tarjeta hacia el exterior.</p>
                     </Link>
 
                     <Link href="sueldo" className={styles.card}>
                         <h3>Sueldo</h3>
-                        <p>Calculo de sueldo bruto a neto con varias opciones y consideraciones.</p>
+                        <p>Calculo de sueldo bruto a sueldo "en mano".</p>
                     </Link>
                     <Link href="/" className={styles.card}>
                         <h3>Mas por venir...</h3>

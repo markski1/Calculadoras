@@ -119,7 +119,7 @@ export default function Impuestos() {
             <Layout>
                 <div className={styles.siteContainer}>
                     <h3 className={styles.text_accent_pink}>Calculadora de impuestos al exterior</h3>
-                    <p className={styles.noMargin}>Ingresa cuanto vas a pagar.</p>
+                    <p className={styles.noMargin}>Calcula pagos al exterior con tarjeta. Aplica a Steam, Netflix, Google, etc.</p>
                     <div className={styles.flexContainer}>
                         <div className={styles.flexBox}>
                             <div style={{textAlign: 'center'}}>

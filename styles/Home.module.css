@@ -178,3 +178,7 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.toMargin {
+  text-align: left;
+}
