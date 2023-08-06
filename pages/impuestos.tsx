@@ -16,6 +16,11 @@ export default function Impuestos() {
     const [totalTaxes, setTotalTaxes] = useState(0);
     const [currency, setCurrency] = useState(1);
     const [province, setProvince] = useState(0);
+    const [digitalServiceTaxDisplay, setDigitalServiceTaxDisplay] = useState(0);
+    const [perceptionTaxDisplay, setPerceptionTaxDisplay] = useState(0);
+    const [paisTaxDisplay, setPaisTaxDisplay] = useState(0);
+    const [provinceTaxDisplay, setProvinceTaxDisplay] = useState(0);
+    const [provincePercent, setProvincePercent] = useState(0);
 
     async function fetchCurrencies() {
         const response = await fetch("https://snep.markski.ar/monedas.php");
@@ -68,6 +73,12 @@ export default function Impuestos() {
         }
         
         let workingTotalTaxes = AFIP + PAIS + provincePercent + digitalServiceTax;
+
+        setPerceptionTaxDisplay(AFIP);
+        setProvinceTaxDisplay(provincePercent);
+        setDigitalServiceTaxDisplay(digitalServiceTax);
+        setPaisTaxDisplay(PAIS);
+        setProvincePercent(pvcPercentage[province] * 100);
         
         setTotalTaxes(workingTotalTaxes);
         setDisplayAmount(workingAmount);
@@ -149,10 +160,10 @@ export default function Impuestos() {
                                 </p>
                                 <small>
                                     <ul>
-                                        <li>IVA Servicios Digitales <span className={styles.money}>AR$<span id="servdig">0,00</span></span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
-                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>AR$<span id="afip">0,00</span></span> <b>(45%)</b></li>
-                                        <li>Ley impuesto PAIS <span className={styles.money}>AR$<span id="pais">0,00</span></span> <b>(8%)</b></li>
-                                        <li>Impuestos provinciales <span className={styles.money}>AR$<span id="pvc">0,00</span></span> <b>(<span id="impuestlol">?</span>%)</b></li>
+                                        <li>IVA Servicios Digitales <span className={styles.money}>AR${digitalServiceTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
+                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>AR${perceptionTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(45%)</b></li>
+                                        <li>Ley impuesto PAIS <span className={styles.money}>AR${paisTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(8%)</b></li>
+                                        <li>Impuestos provinciales <span className={styles.money}>AR${provinceTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
                                 </small>
                             </div>
