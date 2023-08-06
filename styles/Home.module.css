@@ -50,7 +50,6 @@
   flex-basis: 45%;
   padding: 1.5rem;
   text-align: left;
-  color: inherit;
   text-decoration: none;
   border: 1px solid #0c1217;
   color: #64dfdf;
@@ -82,7 +81,7 @@
   height: 1em;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 750px) {
   .grid {
     width: 100%;
     flex-direction: column;
@@ -104,20 +103,78 @@
 }
 
 .text_accent_pink {
-  background: linear-gradient(120deg, #8fb3ff, #d41d6d);
+  background: linear-gradient(120deg, #d41d6d, #8775ec);
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-decoration-color: #64dfdf;
 }
 
 .siteContainer {
-  margin: 1rem;
   padding: 1.5rem;
+  width: 100%;
+  max-width: 1024px;
   text-align: left;
+  border-radius: 10px;
   color: white;
   border: 1px solid #0c1217;
-  color: #64dfdf;
-  border-radius: 10px;
-  transition: color 0.15s ease, border-color 0.15s ease;
-  background-color: #0c1217AA;  
+  background-color: #0c1217AA;
+}
+
+.siteContainer h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.input {
+  background-color: #22084d;
+  color: white;
+  width: 95%;
+  margin: 1rem .5rem;
+  border-width: 0;
+  border-radius: 5px;
+  vertical-align: middle;
+  font-size: 1.25rem;
+  min-width: 15rem;
+  padding: 1rem;
+  padding-left: 1rem;
+}
+
+.input:hover {
+  background-color: #1a1b6e;
+}
+
+.input:active {
+  background-color: #0a0a29;
+}
+
+.flexBox {
+  width: 400px;
+  flex: 1;
+  flex-basis: 45%;
+  max-width: 97%;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 7px;
+  background-color: #0c1217;
+  border: 1px #0f151a;
+}
+
+.money {
+  color: #00CC88;
+}
+
+.noMargin {
+  margin: 0;
+}
+
+.smallHeader {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }

@@ -2,8 +2,10 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+		Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	line-height: 1.5;
+	font-size: 18px;
   background-color: #000000;
   color: #f1e4e5;
 }
@@ -26,16 +28,18 @@ img {
   height: auto;
 }
 
+option {
+  min-width: 2rem;
+}
+
 h1,
-h2,
-p,
-ul {
+h2 {
   margin: 0;
 }
 
 ul {
-  padding: 0;
-  list-style: none;
+  margin: .5rem;
+  margin-left: -0.75rem;
 }
 
 button {
@@ -44,6 +48,9 @@ button {
 }
 
 main {
+  width: 95%;
+  max-width: 1200px;
+  margin: auto;
   padding: 3rem 0;
   flex: 1;
   display: flex;
@@ -63,4 +70,7 @@ code {
   font-size: 1.1rem;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
     DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+}
+form {
+  margin-bottom: 1rem;
 }

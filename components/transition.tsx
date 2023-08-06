@@ -4,16 +4,16 @@ import { useRouter } from 'next/router';
 const variants = {
   out: {
     opacity: 0,
-    y: 100,
+    x: 100,
     transition: {
-      duration: 0.2
+      duration: 0.33
     }
   },
   in: {
     opacity: 1,
-    y: 0,
+    x: 0,
     transition: {
-      duration: 0.2
+      duration: 0.33
     }
   }
 };
