@@ -129,13 +129,13 @@
   background-color: #22084d;
   color: white;
   width: 95%;
-  margin: 1rem .5rem;
+  margin: .5rem 0;
   border-width: 0;
   border-radius: 5px;
   vertical-align: middle;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   min-width: 15rem;
-  padding: 1rem;
+  padding: .8rem;
   padding-left: 1rem;
 }
 
@@ -145,6 +145,18 @@
 
 .input:active {
   background-color: #0a0a29;
+}
+
+.checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  vertical-align: middle;
+  margin-right: 1rem;
+  background-color: #22084d;
+}
+
+.checkbox:checked {
+  background-color: #64dfdf;
 }
 
 .flexBox {

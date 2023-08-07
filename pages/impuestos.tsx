@@ -5,9 +5,13 @@ import Link from 'next/link';
 import Layout from '../components/layout';
 
 export default function Impuestos() {
-    // CONSTANT ARRAY: Contains the percentage of taxes per province.
+    // CONSTANT ARRAYS: 
+    
+    // - Contains the percentage of taxes per province.
 	//                     N/A  CABA  CHACO  CRDB  LPMP  NEUQ  RNGR  SALTA  TDF
 	const pvcPercentage = [0.0, 0.02, 0.055, 0.03, 0.01, 0.03, 0.05, 0.036, 0.0];
+
+
 
     const [currencies, setCurrencies] = useState<{ eur: number; usd: number; brs: number; }>({ eur: -1, usd: -1, brs: -1 });
     const [amount, setAmount] = useState(0);
