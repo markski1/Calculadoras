@@ -54,20 +54,19 @@ export default function Impuestos() {
         if (amount > minIncomeTaxable) {
             let taxableAmount = amount - workingDeductions - nonImpossableEarnings;
 
+            taxableAmount *= 13;
+            taxableAmount /= 12;
+
             if (dependence) taxableAmount -= dependenceDeduction;
             else taxableAmount -= autonomousDeduction;
             if (married) taxableAmount -= marriedDeduction;
 
             taxableAmount -= childDeduction * children;
 
-            taxableAmount *= 13;
-            taxableAmount /= 12;
-
             for (let i = 0; i < incomeTaxBases.length; i++) {
                 if (taxableAmount > incomeTaxBases[i] / 12) {
                     workingIncomeTax = incomeTaxMins[i] / 12;
                     workingIncomeTax += (taxableAmount - incomeTaxBases[i] / 12) * (incomeTaxPercentages[i] * 0.01);
-                    console.log((incomeTaxPercentages[i] * 0.01));
 
                     break;
                 }
@@ -105,8 +104,7 @@ export default function Impuestos() {
     }
 
     function updateMarried() {
-        let checked = (document.getElementById('married') as HTMLInputElement).value;
-        console.log(checked);
+        setMarried( (document.getElementById('married') as HTMLInputElement).checked );
     }
     
     function updateChildren() {
@@ -117,16 +115,12 @@ export default function Impuestos() {
         setChildren(number);
     }
 
-    function updateDependence(checked: boolean) {
-        setDependence(checked);
-    }
-
     function parseToPesos(pesosAmount: number, cents: boolean = true) {
 		return (
 			<span className={styles.money}>
 				$
-				{cents && pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-				{!cents && pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+				{cents && pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                       || pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
 			</span>
 		);
 	}
@@ -134,14 +128,16 @@ export default function Impuestos() {
     return (
         <>
             <HeadParams
-                title = "Calculadora de sueldo bruto a neto"
+                title = "Calculadora de sueldo neto"
                 description = 'Calcular sueldo bruto a sueldo "en mano" con varias opciones y consideraciones.'
                 />
 
             <Layout>
                 <div className={styles.siteContainer}>
-                    <h3 className={styles.text_accent_pink}>Calculadora de sueldo bruto a neto</h3>
-                    <p>Actualizado Agosto 2023</p>
+                    <div style={{margin: '.5rem 1rem'}}>
+                        <h3 className={styles.text_accent_pink}>Calculadora de sueldo bruto a neto</h3>
+                        <p>Actualizado Agosto 2023</p>
+                    </div>
                     <div className={styles.flexContainer}>
                         <div className={styles.flexBox}>
                             <div style={{textAlign: 'center'}}>
@@ -185,7 +181,6 @@ export default function Impuestos() {
                                         <input 
                                             id="married" type="checkbox" 
                                             onChange={() => { updateMarried() }} 
-                                            min={0} 
                                             className={styles.checkbox} 
                                             title="Conyugue a cargo."
                                             />
@@ -195,9 +190,8 @@ export default function Impuestos() {
                                         <input 
                                             id="married" type="radio" 
                                             name="dependence"
-                                            checked
-                                            onClick={() => { updateDependence(true) }} 
-                                            min={0} 
+                                            checked={dependence === true}
+                                            onClick={() => { setDependence(true) }} 
                                             className={styles.checkbox} 
                                             title="Relación de dependencia"
                                             />
@@ -207,8 +201,8 @@ export default function Impuestos() {
                                         <input 
                                             id="married" type="radio" 
                                             name="dependence"
-                                            onClick={() => { updateDependence(false) }} 
-                                            min={0} 
+                                            checked={dependence === false}
+                                            onClick={(e) => { setDependence(false); }} 
                                             className={styles.checkbox} 
                                             title="Autonomo"
                                             />
@@ -244,7 +238,7 @@ export default function Impuestos() {
                                 </div>
                             </div>
                         </div>
-                        <div className={styles.flexBox} style={{marginTop: '1rem'}}>
+                        <div className={styles.flexBox}>
                             <p className={styles.smallHeader}>Información</p>
                             <p>Respecto ganancias, la calculadora considera:</p>
                             <small>

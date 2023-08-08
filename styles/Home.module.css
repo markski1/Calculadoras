@@ -110,7 +110,7 @@
 }
 
 .siteContainer {
-  padding: 1.5rem;
+  padding: 1rem;
   width: 100%;
   max-width: 1024px;
   text-align: left;
@@ -128,7 +128,7 @@
 .input {
   background-color: #22084d;
   color: white;
-  width: 95%;
+  width: 100%;
   margin: .5rem 0;
   border-width: 0;
   border-radius: 5px;
@@ -162,10 +162,10 @@
 .flexBox {
   width: 400px;
   flex: 1;
-  flex-basis: 45%;
+  flex-basis: 48%;
   max-width: 97%;
   padding: 1rem;
-  margin: 1rem;
+  margin: .33rem;
   border-radius: 7px;
   background-color: #0c1217;
   border: 1px #0f151a;

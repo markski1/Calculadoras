@@ -122,8 +122,10 @@ export default function Impuestos() {
 
             <Layout>
                 <div className={styles.siteContainer}>
-                    <h3 className={styles.text_accent_pink}>Calculadora de impuestos al exterior</h3>
-                    <p className={styles.noMargin}>Calcula pagos al exterior con tarjeta. Aplica a Steam, Netflix, Google, etc.</p>
+                    <div style={{margin: '.5rem 1rem'}}>
+                        <h3 className={styles.text_accent_pink}>Calculadora de impuestos al exterior</h3>
+                        <p className={styles.noMargin}>Calcula pagos al exterior con tarjeta. Aplica a Steam, Netflix, Google, etc.</p>
+                    </div>
                     <div className={styles.flexContainer}>
                         <div className={styles.flexBox}>
                             <div style={{textAlign: 'center'}}>
@@ -172,7 +174,7 @@ export default function Impuestos() {
                                 </small>
                             </div>
                         </div>
-                        <div className={styles.flexBox} style={{marginTop: '1rem'}}>
+                        <div className={styles.flexBox}>
                             <p className={styles.smallHeader}>¿Que tan exacto es el resultado?</p>
                             <p>
                                 <small>
