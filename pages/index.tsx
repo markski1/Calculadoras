@@ -7,8 +7,8 @@ export default function Home() {
     return (
         <>
             <HeadParams
-                title = "Inicio"
-                description = "Colección de calculadores utiles relevantes a la Republica Argentina"
+                title = "Bienvenido"
+                description = "Colección de calculadores utiles para la Republica Argentina"
                 />
 
             <Layout home>

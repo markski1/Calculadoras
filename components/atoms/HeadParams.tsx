@@ -6,7 +6,7 @@ export default function HeadParams(props: {title: string, description: string, i
         imgUrl = props.image;
     }
     else {
-        imgUrl = "https://markski.ar/images/profileDesplacement.png";
+        imgUrl = "https://calc.markski.ar/logo_small.png";
     }
 	let showTitle = props.title + " - Calculando Argentina";
 	return (

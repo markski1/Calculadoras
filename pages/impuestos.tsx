@@ -130,7 +130,7 @@ export default function Impuestos() {
         <>
             <HeadParams
                 title = "Calculadora de pagos al exterior Argentina"
-                description = "Calcula impuestos de pagos al exterior, Steam, Netflix, Spotify, Epic Games, etc."
+                description = "Calcula impuestos de pagos al exterior con tarjeta, para Steam, Netflix, Spotify, Epic Games, etc."
                 />
 
             <Layout>
