@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-export default function CommandEntry(props: {title: string, description: string, image?: string}) {
+export default function HeadParams(props: {title: string, description: string, image?: string}) {
     let imgUrl: string;
     if (props.image) {
         imgUrl = props.image;
@@ -8,7 +8,7 @@ export default function CommandEntry(props: {title: string, description: string,
     else {
         imgUrl = "https://markski.ar/images/profileDesplacement.png";
     }
-	let showTitle = props.title + " - Calculadora";
+	let showTitle = props.title + " - Calculando Argentina";
 	return (
 		<Head>
 			<title>{showTitle}</title>

@@ -113,6 +113,16 @@ export default function Impuestos() {
         setProvince(number);
     }
 
+    function parseToPesos(pesosAmount: number, cents: boolean = true) {
+		return (
+			<span className={styles.money}>
+				$
+				{cents && pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                       || pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+			</span>
+		);
+	}
+
     return (
         <>
             <HeadParams
@@ -129,64 +139,94 @@ export default function Impuestos() {
                     <div className={styles.flexContainer}>
                         <div className={styles.flexBox}>
                             <div style={{textAlign: 'center'}}>
-                                <input 
-                                    id="amount" placeholder="Cantidad de dinero" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" 
-                                    onChange={() => { updateAmount() }} 
-                                    required
-                                    min={0} 
-                                    className={styles.input} 
-                                    title="Numero con no mas de 2 decimales."
-                                    />
-                                <select onChange={() => { updateCurrency() }} title="Tipo de moneda" defaultValue={1} className={styles.input} id="currency">
-                                    <option value={1}>AR$</option>
-                                    <option value={2}>USD</option>
-                                    <option value={3}>EUR</option>
-                                    <option value={4}>BR$</option>
-                                </select>
-                                <select onChange={() => { updateProvince() }} title="Provincia" defaultValue={0} className={styles.input} id="province">
-                                    <option value={0}>Provincia</option>
-                                    <option value={1}>Buenos Aires o CABA</option>
-                                    <option value={2}>Chaco</option>
-                                    <option value={3}>Cordoba</option>
-                                    <option value={4}>La Pampa</option>
-                                    <option value={5}>Neuquén</option>
-                                    <option value={6}>Rio Negro</option>
-                                    <option value={7}>Salta</option>
-                                    <option value={8}>Tierra del Fuego</option>
-                                    <option value={-1}>Ninguna de las anteriores</option>
-                                </select>
+                                <label>
+                                    Cantidad de dinero
+                                    <input 
+                                        id="amount" placeholder="Sin comas ni puntos" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" 
+                                        onChange={() => { updateAmount() }} 
+                                        required
+                                        min={0} 
+                                        className={styles.input} 
+                                        title="Numero con no mas de 2 decimales."
+                                        />
+                                </label>
+                                <label>
+                                    Moneda
+                                    <select onChange={() => { updateCurrency() }} title="Tipo de moneda" defaultValue={1} className={styles.input} id="currency">
+                                        <option value={1}>AR$</option>
+                                        <option value={2}>USD</option>
+                                        <option value={3}>EUR</option>
+                                        <option value={4}>BR$</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Provincia
+                                    <select onChange={() => { updateProvince() }} title="Provincia" defaultValue={0} className={styles.input} id="province">
+                                        <option value={0}>Provincia</option>
+                                        <option value={1}>Buenos Aires o CABA</option>
+                                        <option value={2}>Chaco</option>
+                                        <option value={3}>Cordoba</option>
+                                        <option value={4}>La Pampa</option>
+                                        <option value={5}>Neuquén</option>
+                                        <option value={6}>Rio Negro</option>
+                                        <option value={7}>Salta</option>
+                                        <option value={8}>Tierra del Fuego</option>
+                                        <option value={-1}>Ninguna de las anteriores</option>
+                                    </select>
+                                </label>
                             </div>
                         </div>
                         <div className={styles.flexBox}>
-                            <h2 style={{textAlign: 'center'}}>Total: AR${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                            <h2 style={{textAlign: 'center'}}>Total: AR${parseToPesos(total)}</h2>
                             <div>
                                 <p>
-                                En la compra: <span className={styles.money}>AR${displayAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span><br />
-                                En impuestos: <span className={styles.money}>AR${totalTaxes.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    En la compra: <span className={styles.money}>AR${parseToPesos(displayAmount)}</span><br />
+                                    En impuestos: <span className={styles.money}>AR${parseToPesos(totalTaxes)}</span>
                                 </p>
                                 <small>
                                     <ul>
-                                        <li>IVA Servicios Digitales <span className={styles.money}>AR${digitalServiceTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
-                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>AR${perceptionTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(45%)</b></li>
-                                        <li>Ley impuesto PAIS <span className={styles.money}>AR${paisTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(8%)</b></li>
-                                        <li>Impuestos provinciales <span className={styles.money}>AR${provinceTaxDisplay.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
+                                        <li>IVA Servicios Digitales <span className={styles.money}>AR${parseToPesos(digitalServiceTaxDisplay)}</span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
+                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>AR${parseToPesos(perceptionTaxDisplay)}</span> <b>(45%)</b></li>
+                                        <li>Ley impuesto PAIS <span className={styles.money}>AR${parseToPesos(paisTaxDisplay)}</span> <b>(8%)</b></li>
+                                        <li>Impuestos provinciales <span className={styles.money}>AR${parseToPesos(provinceTaxDisplay)}</span> <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
                                 </small>
                             </div>
                         </div>
                         <div className={styles.flexBox}>
                             <p className={styles.smallHeader}>¿Que tan exacto es el resultado?</p>
-                            <p>
-                                <small>
-                                    Depende. Suele ser muy cercano (±2%) si se calcula en pesos.<br/>
-                                    Si estas calculando en otra divisa, hay una buena posibilidad de que tu banco use una conversion un poco distinta a la nuestra. En algunos casos pague hasta 5% mas de lo calculado, asi que hay que estar preparado para todo.<br/>
-                                </small>
-                            </p>
-                            <p>
-                                <small>
-                                    Esta calculadora asume un caso "generico", lo que se pagaria a los servicios mas comunes. Para estar seguros, recomiendo <a className={styles.money} href="https://www.mercadopago.com.ar/ayuda/pagos-en-moneda-extranjera_4063">revisar esta guia</a>. Es de Mercado Pago, pero aplica a la mayoria de las tarjetas.
-                                </small>
-                            </p>
+                            <small>
+                                <p>
+                                    Con pesos suele ser exacto.<br />
+                                    En otra divisa, es posible que tu banco use otra convercion.
+                                </p>
+                                <p>
+                                    Se asume un caso común. Recomiendo <a className={styles.money} href="https://www.mercadopago.com.ar/ayuda/pagos-en-moneda-extranjera_4063">revisar esta guia</a>.
+                                </p>
+                            </small>
+                            <p className={styles.smallHeader}>¿Que es el dolar Qatar/Turista?</p>
+                            <small>
+                                <p>
+                                    Un impuesto que se comienza a aplicar al superar los $300 USD en pagos al exterior en un mes. Se aplica retroactivamente en el momento que se supere el monto, y dejaras de pagarlo solo al siguiente mes.
+                                </p>
+                                <p>
+                                    A valor actual, aplicado a 300 dolares, sería de {parseToPesos(300 * currencies.usd * 0.25)}.
+                                </p>
+                            </small>
+                        </div>
+                        <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem'}}>
+                            <p className={styles.smallHeader}>Acerca</p>
+                            <small>
+                                <p>
+                                    Las calculadoras en esta pagina son 100% gratuitas.
+                                </p>
+                                <p>
+                                    Si queres, podes <Link href="colaborar" className={styles.text_accent_subtle}>colaborar con su mantenimiento</Link>.
+                                </p>
+                                <p>
+                                    Si encontras algun error o tenes sugerencias, podes contactarme por los metodos listados en mi <a href="https://markski.ar" className={styles.text_accent_subtle}>web personal</a>.
+                                </p>
+                            </small>
                         </div>
                     </div>
                 </div>

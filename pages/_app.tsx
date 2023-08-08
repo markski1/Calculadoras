@@ -2,18 +2,13 @@ import '../styles/global.css';
 import { AppProps } from 'next/app';
 import Transition from '../components/transition';
 import '../styles/transition.css';
-import styles from '../styles/Home.module.css';
 import React from 'react';
-import Link from 'next/link';
+import Header from '../components/atoms/Header';
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-        <Link href="/" style={{textDecoration: 'none'}}>
-          <h1 className={styles.title}>
-              <span className={styles.text_accent}>Calculadora Argentina</span>
-          </h1>
-        </Link>
+        <Header />
         <Transition>
             <Component {...pageProps} />
         </Transition>

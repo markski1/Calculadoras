@@ -7,6 +7,7 @@ export default function Layout({ children, home=false }) {
 		<>
 			<Head>
 				<link rel="icon" href="/favicon.png" />
+				<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 			</Head>
             
 			<main>
@@ -20,10 +21,11 @@ export default function Layout({ children, home=false }) {
 			
 			<footer>
 				<p>
-					desarrollado por <a href="https://markski.ar" target="_blank" rel="noopener noreferrer" className={styles.text_accent_subtle}>markski / juan geido</a>
+					desarrollado por <a href="https://markski.ar" target="_blank" rel="noopener noreferrer" className={styles.text_accent_subtle}>juan geido / markski</a><br />
+					aplicación de código abierto. <a href="https://github.com/markski1/Calculadoras" target="_blank" rel="noopener noreferrer" className={styles.text_accent_subtle}>ver en github</a><br />
 				</p>
 				<p>
-					este servicio es 100% gratuito. si queres, <Link href="donar" className={styles.text_accent_subtle}>podes colaborar a su mantenimiento</Link>.
+					<Link href="colaborar" className={styles.text_accent_subtle}>colaborar con calculando argentina</Link>
 				</p>
 			</footer>
 		</>

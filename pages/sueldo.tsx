@@ -10,14 +10,15 @@ export default function Impuestos() {
     const incomeTaxMins =        [620590,  405035,  217035,  137330,  71272,  45197,  24337,  8691,   0]; // Contains the base payment per bracket
     const incomeTaxPercentages = [35,      31,      27,      23,      19,     15,     12,     9,      5]; // Contains the percentage past base payment per bracket
 
-
-    // MINIMUM INCOME FOR APPLYING TAX
+    // BRUTE SALARY ABOVE THIS PAY INCOME TAX
     const minIncomeTaxable = 700875;
+    // BRUTE SALARY BELOW THIS HAS SPECIAL DEDUCTIONS
     const minIncrementalDeduction = 808101;
 
     // TODO: Incremental deduction array.
 
     // SPECIAL DEDUCTIONS
+    // All values are yearly, so divide by 12
     const nonImpossableEarnings = 451683.19 / 12;
     const autonomousDeduction = 1580891.18 / 12;
     const dependenceDeduction = 2168079.35 / 12;
@@ -52,17 +53,34 @@ export default function Impuestos() {
 
         // Begin income tax logic
         if (amount > minIncomeTaxable) {
+            // Take brute salary, remove the fixed dedutions from above, and the non-impossable earnings deduction
             let taxableAmount = amount - workingDeductions - nonImpossableEarnings;
 
+            // multiply by 13 to get SAC values, then down to 12 to go back to monthly
             taxableAmount *= 13;
             taxableAmount /= 12;
-
+            
+            // Workers in dependence relation get one type of deduction
             if (dependence) taxableAmount -= dependenceDeduction;
-            else taxableAmount -= autonomousDeduction;
+            else taxableAmount -= autonomousDeduction; // Autonomous workers get a smaller deduction
+            
+            // People who're married get a deduction
             if (married) taxableAmount -= marriedDeduction;
 
+            // Per every children below the age of 12, there's a deduction.
             taxableAmount -= childDeduction * children;
 
+            // Incremental deduction below a certain point.
+            // THIS IS A TEMPORARY APROXIMATION, based on previous AFIP charts, and there is a warning on the page.
+            // 
+            if (amount < minIncrementalDeduction) {
+                let aux = amount - minIncomeTaxable;
+                aux -= (minIncrementalDeduction - minIncomeTaxable);
+                aux *= -1;
+                taxableAmount -= aux * 1.5;
+            }
+
+            // use the incomeTax* arrays at the top of the file to calculate the tax.
             for (let i = 0; i < incomeTaxBases.length; i++) {
                 if (taxableAmount > incomeTaxBases[i] / 12) {
                     workingIncomeTax = incomeTaxMins[i] / 12;
@@ -72,6 +90,10 @@ export default function Impuestos() {
                 }
             }
         }
+
+        // It is possible for salaries which are barely high enough to enter income tax territory
+        // to have enough deductions to go below. In that case, no tax is paid.
+        if (workingIncomeTax < 0) workingIncomeTax = 0;
 
         workingDeductions += workingIncomeTax;
         
@@ -177,7 +199,7 @@ export default function Impuestos() {
                                         />
                                 </label>
                                 <div className={styles.toMargin}>
-                                    <p>
+                                    <label><p>
                                         <input 
                                             id="married" type="checkbox" 
                                             onChange={() => { updateMarried() }} 
@@ -185,8 +207,8 @@ export default function Impuestos() {
                                             title="Conyugue a cargo."
                                             />
                                         Conyugue a cargo
-                                    </p>
-                                    <p>
+                                    </p></label>
+                                    <label><p>
                                         <input 
                                             id="married" type="radio" 
                                             name="dependence"
@@ -196,8 +218,8 @@ export default function Impuestos() {
                                             title="Relación de dependencia"
                                             />
                                         Relación de dependencia
-                                    </p>
-                                    <p>
+                                    </p></label>
+                                    <label><p>
                                         <input 
                                             id="married" type="radio" 
                                             name="dependence"
@@ -207,7 +229,7 @@ export default function Impuestos() {
                                             title="Autonomo"
                                             />
                                         Autonomo
-                                    </p>
+                                    </p></label>
                                 </div>
                             </div>
                         </div>
@@ -222,18 +244,19 @@ export default function Impuestos() {
                                         <li>Jubilación {parseToPesos(retirementDeduction)} <b>(11%)</b></li>
                                         <li>Obra social {parseToPesos(socialDeduction)} <b>(3%)</b></li>
                                         <li>Aporte PAMI {parseToPesos(pamiDeduction)} <b>(3%)</b></li>
+                                        <li>Aporte sindical {parseToPesos(sindicateDeduction)} <b>({sindicate}%)</b></li>
                                         <li>Imp. ganancias {parseToPesos(incomeDeduction)} <b>(variable)</b></li>
-                                        <li>Aporte sindicato {parseToPesos(sindicateDeduction)}</li>
                                     </ul>
                                 </small>
                                 <p>Todos los resultados son aproximados.</p>
-                                <div style={{backgroundColor: '#FF000011', padding: '1rem', borderRadius: '8px'}}>
+                                <div className={styles.alert}>
+                                    <p>Atención:</p>
                                     <small>
-                                        No estan disponibles aún las deduciones especiales para sueldos menores de $808,101.
-                                    </small>
-                                    <br />
-                                    <small>
-                                        Por lo tanto, si tu sueldo bruto esta entre {parseToPesos(minIncomeTaxable, false)} y {parseToPesos(minIncrementalDeduction, false)}, la calculadora muestra mas ganancia de lo que pagaras en realidad.
+                                        AFIP no subio aún las deduciones especiales para sueldos brutos entre {parseToPesos(minIncomeTaxable, false)} y {parseToPesos(minIncrementalDeduction, false)}.
+                                        <br />
+                                        Para los valores en ese rango, la ganancia calculada utiliza una aproximación que hice en base a las tablas de Mayo.
+                                        <br />
+                                        Apenas esten disponibles (mitad de Agosto, creo), lo voy a cambiar por los valores reales.
                                     </small>
                                 </div>
                             </div>
@@ -244,12 +267,27 @@ export default function Impuestos() {
                             <small>
                                 <ul>
                                     <li>Sueldos mayores a {parseToPesos(minIncomeTaxable, false)} pagan ganancias.</li>
-                                    <li>Sueldos menores a {parseToPesos(minIncrementalDeduction, false)} tienen un descuento incremental.</li>
+                                    <li>Sueldos menores a {parseToPesos(minIncrementalDeduction, false)} tienen una deducción de ganancias incremental.</li>
                                     <li>Personas en relación de dependencia tienen deduccion de {parseToPesos(dependenceDeduction, false)}.</li>
                                     <li>Autonomos, en cambio, tienen deduccion de {parseToPesos(autonomousDeduction, false)}.</li>
                                     <li>Personas con conyugues que no facturen, tienen deduccion de {parseToPesos(marriedDeduction, false)}.</li>
-                                    <li>Por hijo menor de 18 años, deducen {parseToPesos(childDeduction, false)}.</li>
+                                    <li>Por hijo menor de 18 años, se deducen {parseToPesos(childDeduction, false)}.</li>
                                 </ul>
+                                Todos los valores son mensuales.
+                            </small>
+                        </div>
+                        <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem'}}>
+                            <p className={styles.smallHeader}>Acerca</p>
+                            <small>
+                                <p>
+                                    Las calculadoras en esta pagina son 100% gratuitas.
+                                </p>
+                                <p>
+                                    Si queres, podes <Link href="colaborar" className={styles.text_accent_subtle}>colaborar con su mantenimiento</Link>.
+                                </p>
+                                <p>
+                                    Si encontras algun error o tenes sugerencias, podes contactarme por los metodos listados en mi <a href="https://markski.ar" className={styles.text_accent_subtle}>web personal</a>.
+                                </p>
                             </small>
                         </div>
                     </div>
