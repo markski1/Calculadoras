@@ -5,21 +5,24 @@ import Link from 'next/link';
 import Layout from '../components/layout';
 
 export default function Impuestos() {
-    // CONSTANT ARRAYS: 
-    
     // - Contains the percentage of taxes per province.
 	//                     N/A  CABA  CHACO  CRDB  LPMP  NEUQ  RNGR  SALTA  TDF
-	const pvcPercentage = [0.0, 0.02, 0.055, 0.03, 0.01, 0.03, 0.05, 0.036, 0.0];
+	const provincePercentage = [0.0, 0.02, 0.055, 0.03, 0.01, 0.03, 0.05, 0.036, 0.0];
 
+    const afipPercentage = 45;
+    const paisPercentage = 8;
+    const digitalServicePercent = 21;
 
-
+    // input states
     const [currencies, setCurrencies] = useState<{ eur: number; usd: number; brs: number; }>({ eur: -1, usd: -1, brs: -1 });
     const [amount, setAmount] = useState(0);
+    const [currency, setCurrency] = useState(1);
+    const [province, setProvince] = useState(0);
+
+    // display states
     const [displayAmount, setDisplayAmount] = useState(0);
     const [total, setTotal] = useState(0);
     const [totalTaxes, setTotalTaxes] = useState(0);
-    const [currency, setCurrency] = useState(1);
-    const [province, setProvince] = useState(0);
     const [digitalServiceTaxDisplay, setDigitalServiceTaxDisplay] = useState(0);
     const [perceptionTaxDisplay, setPerceptionTaxDisplay] = useState(0);
     const [paisTaxDisplay, setPaisTaxDisplay] = useState(0);
@@ -64,16 +67,16 @@ export default function Impuestos() {
             document.getElementById("tdf-alert").style.display = 'block';
         }
         else {
-            digitalServiceTax = amount * 0.21;
+            digitalServiceTax = amount * (digitalServicePercent * 0.01);
             document.getElementById("tdf-alert").style.display = 'none';
         }
         
-        let AFIP = workingAmount * 0.45;
-        let PAIS = workingAmount * 0.08;
+        let AFIP = workingAmount * (afipPercentage * 0.01);
+        let PAIS = workingAmount * (paisPercentage * 0.01);
         let provincePercent = 0.0;
         
         if (province > 0) {
-            provincePercent = workingAmount * pvcPercentage[province];
+            provincePercent = workingAmount * provincePercentage[province];
         }
         
         let workingTotalTaxes = AFIP + PAIS + provincePercent + digitalServiceTax;
@@ -82,7 +85,7 @@ export default function Impuestos() {
         setProvinceTaxDisplay(provincePercent);
         setDigitalServiceTaxDisplay(digitalServiceTax);
         setPaisTaxDisplay(PAIS);
-        setProvincePercent(pvcPercentage[province] * 100);
+        setProvincePercent(provincePercentage[province] * 100);
         
         setTotalTaxes(workingTotalTaxes);
         setDisplayAmount(workingAmount);

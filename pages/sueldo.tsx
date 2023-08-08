@@ -166,7 +166,7 @@ export default function Impuestos() {
                                 <label>
                                     Sueldo bruto en pesos:
                                     <input 
-                                        placeholder="Sueldo bruto en pesos" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" 
+                                        placeholder="Sin comas ni puntos" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="1" 
                                         id="amount"
                                         onChange={() => { updateAmount() }} 
                                         min={0} 
