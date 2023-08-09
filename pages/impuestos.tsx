@@ -119,7 +119,7 @@ export default function Impuestos() {
     function parseToPesos(pesosAmount: number, cents: boolean = true) {
 		return (
 			<span className={styles.money}>
-				$
+				AR$
 				{cents && pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                        || pesosAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
 			</span>
@@ -180,18 +180,18 @@ export default function Impuestos() {
                             </div>
                         </div>
                         <div className={styles.flexBox}>
-                            <h2 style={{textAlign: 'center'}}>Total: AR${parseToPesos(total)}</h2>
+                            <h2 style={{textAlign: 'center'}}>Total: {parseToPesos(total)}</h2>
                             <div>
                                 <p>
-                                    En la compra: <span className={styles.money}>AR${parseToPesos(displayAmount)}</span><br />
-                                    En impuestos: <span className={styles.money}>AR${parseToPesos(totalTaxes)}</span>
+                                    En la compra: <span className={styles.money}>{parseToPesos(displayAmount)}</span><br />
+                                    En impuestos: <span className={styles.money}>{parseToPesos(totalTaxes)}</span>
                                 </p>
                                 <small>
                                     <ul>
-                                        <li>IVA Servicios Digitales <span className={styles.money}>AR${parseToPesos(digitalServiceTaxDisplay)}</span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
-                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>AR${parseToPesos(perceptionTaxDisplay)}</span> <b>(45%)</b></li>
-                                        <li>Ley impuesto PAIS <span className={styles.money}>AR${parseToPesos(paisTaxDisplay)}</span> <b>(8%)</b></li>
-                                        <li>Impuestos provinciales <span className={styles.money}>AR${parseToPesos(provinceTaxDisplay)}</span> <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
+                                        <li>IVA Servicios Digitales <span className={styles.money}>{parseToPesos(digitalServiceTaxDisplay)}</span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
+                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>{parseToPesos(perceptionTaxDisplay)}</span> <b>(45%)</b></li>
+                                        <li>Ley impuesto PAIS <span className={styles.money}>{parseToPesos(paisTaxDisplay)}</span> <b>(8%)</b></li>
+                                        <li>Impuestos provinciales <span className={styles.money}>{parseToPesos(provinceTaxDisplay)}</span> <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
                                 </small>
                             </div>
@@ -204,7 +204,7 @@ export default function Impuestos() {
                                     En otra divisa, es posible que tu banco use otra convercion.
                                 </p>
                                 <p>
-                                    Se asume un caso común. Recomiendo <a className={styles.money} href="https://www.mercadopago.com.ar/ayuda/pagos-en-moneda-extranjera_4063">revisar esta guia</a>.
+                                    Asumiendo un caso de pago por internet. Recomiendo <a className={styles.money} href="https://www.mercadopago.com.ar/ayuda/pagos-en-moneda-extranjera_4063">revisar esta guia</a>.
                                 </p>
                             </small>
                             <p className={styles.smallHeader}>¿Que es el dolar Qatar/Turista?</p>

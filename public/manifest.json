@@ -1,0 +1,22 @@
+{
+    "name": "Calculando Argentina",
+    "short_name": "CalculAr",
+    "start_url": "/",
+    "display": "standalone",
+    "id": "ar.markski.calc",
+    "icons": [
+        {
+            "src": "icon256.webp",
+            "type": "image/webp",
+            "sizes": "256x256"
+        },
+        {
+            "src": "icon512.webp",
+            "type": "image/webp",
+            "sizes": "512x512"
+        }
+    ],
+    "background_color": "#2be2e2",
+    "theme_color": "#2be2e2",
+    "description": "Kit de calculadoras relevantes a la Republica Argentina."
+}
