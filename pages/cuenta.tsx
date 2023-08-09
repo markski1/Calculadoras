@@ -7,10 +7,10 @@ import PageHeader from '../components/atoms/PageHeader';
 
 export default function Cuenta() {
     // display states
-    const [displayPeople, setDisplayPeople] = useState( [] );
+    const [displayPeople, setDisplayPeople] = useState( [ <p key={0}>Se mostrara cuando se agreguen 3 personas</p> ] );
     const [peopleList, setPeopleList] = useState( [] );
 
-    useEffect(() => {
+    function calculate() {
         if (peopleList.length < 3) {
             setDisplayPeople( [ <p key={0}>Se mostrara cuando se agreguen {3 - peopleList.length} personas</p> ] );
             return;
@@ -124,7 +124,7 @@ export default function Cuenta() {
         }
         
         setDisplayPeople(output);
-    });
+    }
 
     function addPerson() {
         let personName = (document.getElementById('name') as HTMLInputElement).value;
@@ -135,12 +135,13 @@ export default function Cuenta() {
         if (personSpent < 1) return false;
 
         let newList = peopleList;
-        newList.push({ name: personName, spent: personSpent, pays: personPays, id: newList.length });
-        console.log(newList);
+        newList.push({ name: personName, spent: personSpent, pays: personPays, id: peopleList.length });
+        setPeopleList(newList);
 
         (document.getElementById('personForm') as HTMLFormElement).reset();
+        (document.getElementById('name') as HTMLInputElement).focus();
 
-        setPeopleList(newList);
+        calculate();
 
         return true;
     }
