@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
 import Link from 'next/link';
 import Layout from '../components/layout';
@@ -27,9 +27,9 @@ export default function Home() {
                     <p>Calculo de rendimiento de plazo fijo, dando capital, interes y dias.</p>
                 </Link>
 
-                <Link href="/" className={styles.card}>
-                    <h3>Mas por venir...</h3>
-                    <p>Voy a ir agregando calculadoras a medida que tenga tiempo.</p>
+                <Link href="cuenta" className={styles.card}>
+                    <h3>Dividir cuenta</h3>
+                    <p>Agrega cuanto gasto cada uno y quien paga la cuenta, y mira cuanto le tiene que dar cada uno al que pago.</p>
                 </Link>
             </Layout>
         </>

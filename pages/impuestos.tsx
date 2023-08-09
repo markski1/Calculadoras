@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
 import Link from 'next/link';
 import Layout from '../components/layout';
+import PageHeader from '../components/atoms/PageHeader';
 
 export default function Impuestos() {
     // - Contains the percentage of taxes per province.
@@ -135,19 +136,18 @@ export default function Impuestos() {
 
             <Layout>
                 <div className={styles.siteContainer}>
-                    <div style={{margin: '.5rem 1rem'}}>
+                    <PageHeader>
                         <h3 className={styles.text_accent_pink}>Calculadora de impuestos al exterior</h3>
                         <p className={styles.noMargin}>Calcula pagos al exterior con tarjeta. Aplica a Steam, Netflix, Google, etc.</p>
-                    </div>
+                    </PageHeader>
                     <div className={styles.flexContainer}>
-                        <div className={styles.flexBox}>
+                        <div className={styles.flexBox} style={{userSelect: 'none'}}>
                             <div style={{textAlign: 'center'}}>
                                 <label>
                                     Cantidad de dinero
                                     <input 
-                                        id="amount" placeholder="Sin comas ni puntos" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" 
+                                        id="amount" placeholder="Sin comas ni puntos" type="number" step="0.01" 
                                         onChange={() => { updateAmount() }} 
-                                        required
                                         min={0} 
                                         className={styles.input} 
                                         title="Numero con no mas de 2 decimales."
@@ -183,20 +183,20 @@ export default function Impuestos() {
                             <h2 style={{textAlign: 'center'}}>Total: {parseToPesos(total)}</h2>
                             <div>
                                 <p>
-                                    En la compra: <span className={styles.money}>{parseToPesos(displayAmount)}</span><br />
-                                    En impuestos: <span className={styles.money}>{parseToPesos(totalTaxes)}</span>
+                                    En la compra: {parseToPesos(displayAmount)}<br />
+                                    En impuestos: {parseToPesos(totalTaxes)}
                                 </p>
                                 <small>
                                     <ul>
-                                        <li>IVA Servicios Digitales <span className={styles.money}>{parseToPesos(digitalServiceTaxDisplay)}</span> <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
-                                        <li>Percepción RG AFIP 4815 <span className={styles.money}>{parseToPesos(perceptionTaxDisplay)}</span> <b>(45%)</b></li>
-                                        <li>Ley impuesto PAIS <span className={styles.money}>{parseToPesos(paisTaxDisplay)}</span> <b>(8%)</b></li>
-                                        <li>Impuestos provinciales <span className={styles.money}>{parseToPesos(provinceTaxDisplay)}</span> <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
+                                        <li>IVA Servicios Digitales {parseToPesos(digitalServiceTaxDisplay)} <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
+                                        <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(45%)</b></li>
+                                        <li>Ley impuesto PAIS {parseToPesos(paisTaxDisplay)} <b>(8%)</b></li>
+                                        <li>Impuestos provinciales {parseToPesos(provinceTaxDisplay)} <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
                                 </small>
                             </div>
                         </div>
-                        <div className={styles.flexBox}>
+                        <div className={styles.flexBox} style={{userSelect: 'none'}}>
                             <p className={styles.smallHeader}>¿Que tan exacto es el resultado?</p>
                             <small>
                                 <p>
@@ -217,7 +217,7 @@ export default function Impuestos() {
                                 </p>
                             </small>
                         </div>
-                        <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem'}}>
+                        <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem', userSelect: 'none'}}>
                             <p className={styles.smallHeader}>Acerca</p>
                             <small>
                                 <p>

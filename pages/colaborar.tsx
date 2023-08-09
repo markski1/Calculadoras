@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
 import Layout from '../components/layout';
 
@@ -11,7 +11,7 @@ export default function Impuestos() {
                 />
 
             <Layout>
-                <div className={styles.siteContainer}>
+                <div className={styles.siteContainer} style={{userSelect: 'none'}}>
                     <div style={{margin: '.5rem 1rem'}}>
                         <h3 className={styles.text_accent_pink}>Colaborar</h3>
                         <p>
@@ -27,7 +27,7 @@ export default function Impuestos() {
                             Metodos:
                         </p>
                         <ul>
-                            <li><b>Transferencia</b>: Desde cualquier banco o billetera, podes transferir al alias "<span className={styles.text_accent_subtle}>markski</span>".</li>
+                            <li><b>Transferencia</b>: Desde cualquier banco o billetera, podes transferir al alias "<span className={styles.text_accent_subtle} style={{userSelect: 'text'}}>markski</span>".</li>
                             <li><b>MercadoPago o Tarjeta</b>: A traves de <a href="https://cafecito.app/Markski" className={styles.text_accent_subtle}>Cafecito</a>.</li>
                             <li><b>PayPal</b>: A traves de <a href="https://ko-fi.com/Markski" className={styles.text_accent_subtle}>Ko-Fi</a>.</li>
                         </ul>
