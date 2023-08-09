@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
 import Link from 'next/link';
 import Layout from '../components/layout';
+import PageHeader from '../components/atoms/PageHeader';
 
-export default function Impuestos() {
+export default function Sueldo() {
     // INCOME TAX BRACKET BASES
 	const incomeTaxBases =       [2781353, 2086016, 1390677, 1043008, 695339, 521504, 347670, 173843, 0]; // Contains the bases for income tax brackets
     const incomeTaxMins =        [620590,  405035,  217035,  137330,  71272,  45197,  24337,  8691,   0]; // Contains the base payment per bracket
@@ -156,17 +157,17 @@ export default function Impuestos() {
 
             <Layout>
                 <div className={styles.siteContainer}>
-                    <div style={{margin: '.5rem 1rem'}}>
+                    <PageHeader>
                         <h3 className={styles.text_accent_pink}>Calculadora de sueldo bruto a neto</h3>
                         <p>Actualizado Agosto 2023</p>
-                    </div>
+                    </PageHeader>
                     <div className={styles.flexContainer}>
-                        <div className={styles.flexBox}>
+                        <div className={styles.flexBox} style={{userSelect: 'none'}}>
                             <div style={{textAlign: 'center'}}>
                                 <label>
                                     Sueldo bruto en pesos:
                                     <input 
-                                        placeholder="Sin comas ni puntos" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="1" 
+                                        placeholder="Sin comas ni puntos" type="number" step="1" 
                                         id="amount"
                                         onChange={() => { updateAmount() }} 
                                         min={0} 
@@ -178,7 +179,7 @@ export default function Impuestos() {
                                     Porcentaje a sindicato<br/>
                                     <small>(Dejar vacio si no aplica)</small>
                                     <input 
-                                        placeholder="% sindicato" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.1" 
+                                        placeholder="% sindicato" type="number" step="0.1" 
                                         id="sindicate"
                                         onChange={() => { updateSindicate() }} 
                                         min={0} 
@@ -190,7 +191,7 @@ export default function Impuestos() {
                                     Hijos menores de 18<br/>
                                     <small>(Dejar vacio si no aplica)</small>
                                     <input 
-                                        placeholder="Cantidad de hijos." type="number" pattern="[0-9]+([\.,][0-9]+)?" step="1" 
+                                        placeholder="Cantidad de hijos." type="number" step="1" 
                                         id="children"
                                         onChange={() => { updateChildren() }} 
                                         min={0} 
@@ -261,7 +262,7 @@ export default function Impuestos() {
                                 </div>
                             </div>
                         </div>
-                        <div className={styles.flexBox}>
+                        <div className={styles.flexBox} style={{userSelect: 'none'}}>
                             <p className={styles.smallHeader}>Información</p>
                             <p>Respecto ganancias, la calculadora considera:</p>
                             <small>
@@ -276,7 +277,7 @@ export default function Impuestos() {
                                 Todos los valores son mensuales.
                             </small>
                         </div>
-                        <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem'}}>
+                        <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem', userSelect: 'none'}}>
                             <p className={styles.smallHeader}>Acerca</p>
                             <small>
                                 <p>
