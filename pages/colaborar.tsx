@@ -15,7 +15,7 @@ export default function Impuestos() {
                     <div style={{margin: '.5rem 1rem'}}>
                         <h3 className={styles.text_accent_pink}>Colaborar</h3>
                         <p>
-                            <span className={styles.text_accent}>Calculando Argentina</span> es una aplicación web 100% gratuita, mantenida por una sola persona.
+                            <span className={styles.text_accent}>Calculando Argentina</span> es una aplicación web 100% gratuita, sin publicidad, y mantenida por una sola persona.
                         </p>
                         <p>
                             Si bien el costo monetario del sitio no es alto, tiene tambien otro costo, en la forma de tiempo personal, para desarrollar y mantener el sitio en correcto funcionamiento y con datos actualizados.<br />

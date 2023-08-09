@@ -6,15 +6,144 @@ import Layout from '../components/layout';
 import PageHeader from '../components/atoms/PageHeader';
 
 export default function Cuenta() {
-    let peopleArray = [ {name: String, spent: Number} ];
-
     // display states
-    const [displayPeople, setDisplayPeople] = useState( <p>Nadie agregado aún.</p> );
-    const [peopleUpdated, setPeopleUpdated] = useState(0);
+    const [displayPeople, setDisplayPeople] = useState( [] );
+    const [peopleList, setPeopleList] = useState( [] );
 
     useEffect(() => {
+        if (peopleList.length < 3) {
+            setDisplayPeople( [ <p key={0}>Se mostrara cuando se agreguen {3 - peopleList.length} personas</p> ] );
+            return;
+        }
+
+        let payDirectly = [];
+        let payTheOthers = [];
+        let totalSpentAmount = 0;
+
+        // how much money must be received by those who do pay directly
+        let toBeReceived = 0;
+
+        // First pass: Separate those who pay directly and who don't.
+        peopleList.forEach(person => {
+            if (person.pays) {
+                payDirectly.push( {name: person.name, spent: person.spent, needsGetPaid: 0} );
+                toBeReceived -= person.spent; // this person pays their own bill
+            }
+            else {
+                payTheOthers.push( {name: person.name, spent: person.spent} );
+            }
+            totalSpentAmount += person.spent;
+        });
+
+        // add the total to this variable, to which the payments of the footers was already substracted above.
+        toBeReceived += totalSpentAmount;
+
+        // How much each who pays directly will pay.
+        let payAmount:number;
         
-    }, [peopleUpdated]);
+        if (payDirectly.length > 0) {
+            payAmount = totalSpentAmount / payDirectly.length;
+        }
+        else {
+            // if no direct payers were added yet, can't calculate.
+            setDisplayPeople( [ <p key={0}>Se mostrara cuando se agregue al menos una persona que pague la cuenta</p> ] );
+            return;
+        }
+
+        // start result output with the total. 
+        let output = [ (<p>Total: {parseToPesos(totalSpentAmount, false)}</p>) ];
+
+        // Print how much footers must pay.
+        payDirectly.forEach(person => {
+            output.push(<hr />);
+			output.push(<p key={person.id}>{person.name} paga {parseToPesos(payAmount, false)} directamente</p>);
+            person.needsGetPaid = payAmount - person.spent;
+		});
+
+        // this array will contain people who cannot pay whole amounts to a single footer.
+        let roundTwoPayments = [];
+
+        // Now, for everyone who must get paid
+        for (let person of payTheOthers) {
+            let nameGetsPaid = "";
+
+            // Of those who footed the bill, see if the payment fits for any of them them
+            for (let element of payDirectly) {
+                if (element.needsGetPaid >= person.spent) {
+                    nameGetsPaid = element.name;
+                    element.needsGetPaid -= person.spent;
+                    break;
+                }
+            };
+            // sort per run so that, for the next person, highest footer gets evaluated first.
+            payDirectly.sort((a, b) => b.needsGetPaid - a.needsGetPaid);
+                    
+            // best scenario: they can pay it all to a single person.
+            if (nameGetsPaid.length >= 1) {
+                output.push(<hr />);
+                output.push(<p key={person.id}>{person.name} le paga {parseToPesos(person.spent, false)} a {nameGetsPaid}</p>);
+            }
+            else {
+                // worst scenario: payment must be divided
+                roundTwoPayments.push(person);
+            }
+		};
+
+        // payment divisions, if needed
+        if (roundTwoPayments.length > 0) {
+            for (let person of roundTwoPayments) {
+                let paymentObj = [ ];
+
+                // how much the person has to pay.
+                // separate variable as this will get substracted each part of a payment.
+                let hasToPay = person.spent;
+
+                // again, go through all the footers, see how much they have to get paid.
+                for (let footer of payDirectly) {
+                    // if this footer needs to be paid, and the person hasn't completed the payments yet
+                    if (footer.needsGetPaid > 0 && hasToPay > 0) {
+                        let paysThisPerson = 0;
+
+                        if (hasToPay > footer.needsGetPaid) {
+                            paysThisPerson = footer.needsGetPaid;
+                            footer.needsGetPaid = 0;
+                        }
+                        else {
+                            paysThisPerson = hasToPay;
+                            footer.needsGetPaid -= hasToPay;
+                        }
+
+                        hasToPay -= paysThisPerson;
+                        paymentObj.push(<span>{parseToPesos(paysThisPerson, false)} a {footer.name} </span>);
+                    }
+                };
+
+                output.push(<hr />);
+                output.push(<p key={person.id}>{person.name} debe dividir su pago: {paymentObj}</p>);
+            }
+        }
+        
+        setDisplayPeople(output);
+    });
+
+    function addPerson() {
+        let personName = (document.getElementById('name') as HTMLInputElement).value;
+        let personSpent = parseInt((document.getElementById('spent') as HTMLInputElement).value);
+        let personPays = (document.getElementById('pays') as HTMLInputElement).checked;
+
+        if (personName.length < 1) return false;
+        if (personSpent < 1) return false;
+
+        let newList = peopleList;
+        newList.push({ name: personName, spent: personSpent, pays: personPays, id: newList.length });
+        console.log(newList);
+
+        (document.getElementById('personForm') as HTMLFormElement).reset();
+
+        setPeopleList(newList);
+
+        return true;
+    }
 
     function parseToPesos(pesosAmount: number, cents: boolean = true) {
 		return (
@@ -41,26 +170,15 @@ export default function Cuenta() {
                 <div className={styles.siteContainer}>
                     <PageHeader>
                         <h3 className={styles.text_accent_pink}>Calculadora división de cuenta</h3>
-                        <label>
-                            Gasto total:
-                            <input 
-                                id="amount" placeholder="Sin comas ni puntos" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.1" 
-                                required
-                                min={0} 
-                                className={styles.input} 
-                                title="Numero con no mas de 2 decimales."
-                                />
-                        </label>
                     </PageHeader>
                     <div className={styles.flexContainer}>
                         <div className={styles.flexBox} style={{userSelect: 'none'}}>
-                            <form style={{textAlign: 'center'}}>
+                            <form id="personForm" style={{textAlign: 'center'}} onSubmit={(e) => { e.preventDefault(); }}>
                                 <h3>Agregar persona</h3>
                                 <label>
                                     Nombre persona
                                     <input 
-                                        id="interest" type="text" placeholder="Anastasio"
-                                        required
+                                        id="name" type="text" placeholder="Ingresar nombre"
                                         min={0}
                                         className={styles.input} 
                                         title="Numero con no mas de 2 decimales."
@@ -69,26 +187,25 @@ export default function Cuenta() {
                                 <label>
                                     Gasto de persona
                                     <input 
-                                        id="days" type="number" placeholder="Sin coma ni puntos" step="1" 
-                                        required
-                                        min={0} 
+                                        id="spent" type="number" placeholder="Sin coma ni puntos" step="1" 
+                                        min={0}
                                         className={styles.input} 
                                         title="Numero con no mas de 2 decimales."
                                         />
                                 </label>
                                 <label><p>
                                     <input 
-                                        id="pagacuenta" type="checkbox" 
+                                        id="pays" type="checkbox" 
                                         className={styles.checkbox} 
                                         title="Indica si esta persona paga o no la cuenta."
                                         />
                                     Paga la cuenta
                                 </p></label>
-                                <input type="submit" value="Agregar persona" className={styles.input} />
+                                <input type="submit" onClick={() => { addPerson(); } } value="Agregar persona" className={styles.input} />
                             </form>
                         </div>
                         <div className={styles.flexBox}>
-                            <h2 style={{textAlign: 'center'}}>Resultados</h2>
+                            <h2 style={{textAlign: 'center'}}>Resultado</h2>
                             <div>
                                 {displayPeople}
                             </div>
@@ -100,10 +217,10 @@ export default function Cuenta() {
                                     Esta calculadora es util para dividir gastos a la hora de pedir comida o pagar una cuenta.
                                 </p>
                                 <p>
-                                    Sensillamente indica el gasto total arriba del todo. Despues, anda agregando persona por persona, cuanto gasto cada uno.
+                                    Sensillamente agrega persona por persona cuanto gasto cada uno. A quienes pagan la cuenta directamente, marca el campo "Paga la cuenta".
                                 </p>
                                 <p>
-                                    Para las personas que pagan la cuenta directamente, marca el campo "Paga la cuenta".<br />La cuenta total se divide entre ellas, y a las demas se les dira cuanto le tienen que dar a los que pagaron.
+                                    La cuenta total se divide entre ellas, y a las demas se les dira cuanto le tienen que dar a los que pagaron.
                                 </p>
                             </small>
                         </div>
