@@ -16,7 +16,7 @@
             "sizes": "512x512"
         }
     ],
-    "background_color": "#100010",
+    "background_color": "#2be2e2",
     "theme_color": "#150015",
     "description": "Kit de calculadoras relevantes a la Republica Argentina."
 }
