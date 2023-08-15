@@ -213,7 +213,7 @@ export default function Impuestos() {
                                     Un impuesto que se comienza a aplicar al superar los $300 USD en pagos al exterior en un mes. Se aplica retroactivamente en el momento que se supere el monto, y dejaras de pagarlo solo al siguiente mes.
                                 </p>
                                 <p>
-                                    A valor actual, aplicado a 300 dolares, sería de {parseToPesos(300 * currencies.usd * 0.25)}.
+                                    A valor actual, aplicado a 300 dolares, sería de {parseToPesos(300 * currencies.usd * 0.5)}.
                                 </p>
                             </small>
                         </div>

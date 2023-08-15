@@ -22,7 +22,7 @@ export default function Sueldo() {
     // BRUTE SALARY BELOW THIS HAS SPECIAL DEDUCTIONS
     const minIncrementalDeduction = 808101;
 
-    // TODO: Incremental deduction array.
+    const maximumImpossableBase = 776478.32;
 
     // SPECIAL DEDUCTIONS
     // All values are yearly, so divide by 12
@@ -49,9 +49,19 @@ export default function Sueldo() {
     
 
     useEffect(() => {
-        let retirement = amount * 0.11;
-        let social = amount * 0.03;
-        let pami = amount * 0.03;
+        let impossableAmount:number;
+
+        if (amount > maximumImpossableBase) {
+            impossableAmount = maximumImpossableBase;
+        }
+        else {
+            impossableAmount = amount;
+        }
+
+        let retirement = impossableAmount * 0.11;
+        let social = impossableAmount * 0.03;
+        let pami = impossableAmount * 0.03;
+
         let sind = amount * (sindicate * 0.01);
 
         let workingDeductions = retirement + social + pami + sind;
@@ -261,9 +271,10 @@ export default function Sueldo() {
                         </div>
                         <div className={styles.flexBox} style={{userSelect: 'none'}}>
                             <p className={styles.smallHeader}>Información</p>
-                            <p>Respecto ganancias, la calculadora considera:</p>
+                            <p>Consideraciones tomadas implicitamente por la calculadora:</p>
                             <small>
                                 <ul>
+                                    <li>Aportes fijos son sobre un maximo imponible de {parseToPesos(maximumImpossableBase, false)}</li>
                                     <li>Sueldos mayores a {parseToPesos(minIncomeTaxable, false)} pagan ganancias.</li>
                                     <li>Sueldos menores a {parseToPesos(minIncrementalDeduction, false)} tienen una <a className={styles.text_accent_subtle} href="https://www.afip.gob.ar/gananciasYBienes/ganancias/personas-humanas-sucesiones-indivisas/deducciones/documentos/Deduccion_especial_incrementada_agosto_2023.pdf">deducción especial incremental</a>.</li>
                                     <li>Personas en relación de dependencia tienen deduccion de {parseToPesos(dependenceDeduction, false)}.</li>
