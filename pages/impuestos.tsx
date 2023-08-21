@@ -201,7 +201,7 @@ export default function Impuestos() {
                             <small>
                                 <p>
                                     Con pesos suele ser exacto.<br />
-                                    En otra divisa, es posible que tu banco use otra convercion.
+                                    En otra divisa, es posible que tu banco use otra conversion.
                                 </p>
                                 <p>
                                     Asumiendo un caso de pago por internet. Recomiendo <a className={styles.money} href="https://www.mercadopago.com.ar/ayuda/pagos-en-moneda-extranjera_4063">revisar esta guia</a>.
