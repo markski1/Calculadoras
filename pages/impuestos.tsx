@@ -212,15 +212,6 @@ export default function Impuestos() {
                                     Asumiendo un caso de pago por internet. Recomiendo <a className={styles.money} href="https://www.mercadopago.com.ar/ayuda/pagos-en-moneda-extranjera_4063">revisar esta guia</a>.
                                 </p>
                             </small>
-                            <p className={styles.smallHeader}>¿Que es el dolar Qatar/Turista?</p>
-                            <small>
-                                <p>
-                                    Un impuesto que se comienza a aplicar al superar los $300 USD en pagos al exterior en un mes. Se aplica retroactivamente en el momento que se supere el monto, y dejaras de pagarlo solo al siguiente mes.
-                                </p>
-                                <p>
-                                    A valor actual, aplicado a 300 dolares, sería de {parseToPesos(300 * currencies.usd * 0.05)}.
-                                </p>
-                            </small>
                         </div>
                         <div className={styles.flexBox} style={{flexBasis: '49%', flex: '2', minWidth: '15rem', userSelect: 'none'}}>
                             <p className={styles.smallHeader}>Acerca</p>
