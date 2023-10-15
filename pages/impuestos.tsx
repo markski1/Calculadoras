@@ -13,6 +13,7 @@ export default function Impuestos() {
     const afipPercentage = 45;
     const paisPercentage = 8;
     const digitalServicePercent = 21;
+    const personalGoods = 25;
 
     // input states
     const [currencies, setCurrencies] = useState<{ eur: number; usd: number; brs: number; }>({ eur: -1, usd: -1, brs: -1 });
@@ -27,6 +28,7 @@ export default function Impuestos() {
     const [digitalServiceTaxDisplay, setDigitalServiceTaxDisplay] = useState(0);
     const [perceptionTaxDisplay, setPerceptionTaxDisplay] = useState(0);
     const [paisTaxDisplay, setPaisTaxDisplay] = useState(0);
+    const [goodsTaxDisplay, setGoodsTaxDisplay] = useState(0);
     const [provinceTaxDisplay, setProvinceTaxDisplay] = useState(0);
     const [provincePercent, setProvincePercent] = useState(0);
 
@@ -72,6 +74,7 @@ export default function Impuestos() {
             document.getElementById("tdf-alert").style.display = 'none';
         }
         
+        let BIENES = workingAmount * (personalGoods * 0.01);
         let AFIP = workingAmount * (afipPercentage * 0.01);
         let PAIS = workingAmount * (paisPercentage * 0.01);
         let provincePercent = 0.0;
@@ -80,12 +83,13 @@ export default function Impuestos() {
             provincePercent = workingAmount * provincePercentage[province];
         }
         
-        let workingTotalTaxes = AFIP + PAIS + provincePercent + digitalServiceTax;
+        let workingTotalTaxes = AFIP + PAIS + provincePercent + digitalServiceTax + BIENES;
 
         setPerceptionTaxDisplay(AFIP);
         setProvinceTaxDisplay(provincePercent);
         setDigitalServiceTaxDisplay(digitalServiceTax);
         setPaisTaxDisplay(PAIS);
+        setGoodsTaxDisplay(BIENES);
         setProvincePercent(provincePercentage[province] * 100);
         
         setTotalTaxes(workingTotalTaxes);
@@ -190,6 +194,7 @@ export default function Impuestos() {
                                     <ul>
                                         <li>IVA Servicios Digitales {parseToPesos(digitalServiceTaxDisplay)} <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
                                         <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(45%)</b></li>
+                                        <li>Percepción RG AFIP 5272 {parseToPesos(goodsTaxDisplay)} <b>(25%)</b></li>
                                         <li>Ley impuesto PAIS {parseToPesos(paisTaxDisplay)} <b>(8%)</b></li>
                                         <li>Impuestos provinciales {parseToPesos(provinceTaxDisplay)} <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
