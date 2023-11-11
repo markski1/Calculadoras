@@ -70,7 +70,7 @@ export default function Impuestos() {
             document.getElementById("tdf-alert").style.display = 'block';
         }
         else {
-            digitalServiceTax = amount * (digitalServicePercent * 0.01);
+            digitalServiceTax = workingAmount * (digitalServicePercent * 0.01);
             document.getElementById("tdf-alert").style.display = 'none';
         }
         
