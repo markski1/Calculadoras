@@ -68,6 +68,7 @@ export default function Sueldo() {
 
         let workingIncomeTax = 0;
 
+        /*
         // Begin income tax logic
         if (amount > minIncomeTaxable) {
             // Take brute salary, remove the fixed dedutions from above, and the non-impossable earnings deduction
@@ -108,6 +109,7 @@ export default function Sueldo() {
                 }
             }
         }
+        */
 
         // It is possible for salaries which are barely high enough to enter income tax territory
         // to have enough deductions to go below. In that case, no tax is paid.
@@ -275,6 +277,7 @@ export default function Sueldo() {
                             <small>
                                 <ul>
                                     <li>Aportes fijos son sobre un maximo imponible de {parseToPesos(maximumImpossableBase, false)}</li>
+                                    <li>ACTUALMENTE DESHABILITADO IMP. GANANCIA</li>
                                     <li>Sueldos mayores a {parseToPesos(minIncomeTaxable, false)} pagan ganancias.</li>
                                     <li>Sueldos menores a {parseToPesos(minIncrementalDeduction, false)} tienen una <a className={styles.text_accent_subtle} href="https://www.afip.gob.ar/gananciasYBienes/ganancias/personas-humanas-sucesiones-indivisas/deducciones/documentos/Deduccion_especial_incrementada_agosto_2023.pdf">deducción especial incremental</a>.</li>
                                     <li>Personas en relación de dependencia tienen deduccion de {parseToPesos(dependenceDeduction, false)}.</li>
