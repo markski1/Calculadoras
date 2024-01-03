@@ -10,7 +10,7 @@ export default function Impuestos() {
 	//                     N/A  CABA  CHACO  CRDB  LPMP  NEUQ  RNGR  SALTA  TDF
 	const provincePercentage = [0.0, 0.02, 0.055, 0.03, 0.01, 0.03, 0.05, 0.036, 0.0];
 
-    const afipPercentage = 45;
+    const afipPercentage = 30;
     const paisPercentage = 8;
     const digitalServicePercent = 21;
     const personalGoods = 25;
@@ -193,7 +193,7 @@ export default function Impuestos() {
                                 <small>
                                     <ul>
                                         <li>IVA Servicios Digitales {parseToPesos(digitalServiceTaxDisplay)} <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
-                                        <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(45%)</b></li>
+                                        <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(30%)</b></li>
                                         <li>Percepción RG AFIP 5272 {parseToPesos(goodsTaxDisplay)} <b>(25%)</b></li>
                                         <li>Ley impuesto PAIS {parseToPesos(paisTaxDisplay)} <b>(8%)</b></li>
                                         <li>Impuestos provinciales {parseToPesos(provinceTaxDisplay)} <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>

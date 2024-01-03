@@ -6,8 +6,8 @@ import Layout from '../components/layout';
 import PageHeader from '../components/atoms/PageHeader';
 
 export default function PlazoFijo() {
-    const currentInterestRate = 97;
-    const SMMV = 105000;
+    const currentInterestRate = 85;
+    const SMMV = 156000;
 
     // input states
     const [amount, setAmount] = useState(0);
