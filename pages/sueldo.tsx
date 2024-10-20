@@ -22,15 +22,16 @@ export default function Sueldo() {
     // BRUTE SALARY BELOW THIS HAS SPECIAL DEDUCTIONS
     const minIncrementalDeduction = 808101;
 
-    const maximumImpossableBase = 776478.32;
+    const maximumImpossableBase = 2674292.72;
 
     // SPECIAL DEDUCTIONS
     // All values are yearly, so divide by 12
-    const nonImpossableEarnings = 451683.19 / 12;
+    // https://www.afip.gob.ar/gananciasYBienes/ganancias/personas-humanas-sucesiones-indivisas/deducciones/documentos/Deducciones-personales-art-30-liquidacion-anual-2024.pdf
+    const nonImpossableEarnings = 3503688.17 / 12;
     const autonomousDeduction = 1580891.18 / 12;
     const dependenceDeduction = 2168079.35 / 12;
-    const marriedDeduction = 421088.24 / 12;
-    const childDeduction = 212356.37 / 12;
+    const marriedDeduction = 3299771.52 / 12;
+    const childDeduction = 1664086.82 / 12;
 
     
 
@@ -178,7 +179,7 @@ export default function Sueldo() {
                 <div className={styles.siteContainer}>
                     <PageHeader>
                         <h3 className={styles.text_accent_pink}>Calculadora de sueldo bruto a neto</h3>
-                        <p>Actualizado Agosto 2023</p>
+                        <p>Actualizado Octubre 2024</p>
                     </PageHeader>
                     <div className={styles.flexContainer}>
                         <div className={styles.flexBox} style={{userSelect: 'none'}}>
@@ -269,6 +270,7 @@ export default function Sueldo() {
                                     </ul>
                                 </small>
                                 <p>Todos los resultados son aproximados.</p>
+                                <p>ATENCIÓN: Actualmente no se calcula el imp. ganancias. Pronto será arreglado.</p>
                             </div>
                         </div>
                         <div className={styles.flexBox} style={{userSelect: 'none'}}>
@@ -277,9 +279,6 @@ export default function Sueldo() {
                             <small>
                                 <ul>
                                     <li>Aportes fijos son sobre un maximo imponible de {parseToPesos(maximumImpossableBase, false)}</li>
-                                    <li>ACTUALMENTE DESHABILITADO IMP. GANANCIA</li>
-                                    <li>Sueldos mayores a {parseToPesos(minIncomeTaxable, false)} pagan ganancias.</li>
-                                    <li>Sueldos menores a {parseToPesos(minIncrementalDeduction, false)} tienen una <a className={styles.text_accent_subtle} href="https://www.afip.gob.ar/gananciasYBienes/ganancias/personas-humanas-sucesiones-indivisas/deducciones/documentos/Deduccion_especial_incrementada_agosto_2023.pdf">deducción especial incremental</a>.</li>
                                     <li>Personas en relación de dependencia tienen deduccion de {parseToPesos(dependenceDeduction, false)}.</li>
                                     <li>Autonomos, en cambio, tienen deduccion de {parseToPesos(autonomousDeduction, false)}.</li>
                                     <li>Personas con conyugues que no facturen, tienen deduccion de {parseToPesos(marriedDeduction, false)}.</li>

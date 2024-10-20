@@ -3,6 +3,9 @@ Una aplicación web en construccion, con calculadoras relevantes a la republica 
 
 Actualmente corriendo en [https://calc.markski.ar](https://calc.markski.ar).
 
+### Ayuda requerida
+Siempre se busca ayuda para mantener los valores actualizados, ya sea impuestos o demas cosas. Necesito ayuda especialmente en el apartado de la calculadora de sueldo neto, ya que me cuesta entender las regulaciónes y donde encontrar la información mas reciente de AFIP. Es todo muy inconsistente.
+
 ### Desarrollar localmente
 
 Primero, clona el repositorio localmente en tu PC.
