@@ -15,11 +15,8 @@ export default function Layout({ children, home=false }) {
 			
 			<footer>
 				<p>
-					desarrollado por <a href="https://markski.ar" target="_blank" rel="noopener noreferrer" className={styles.text_accent_subtle}>juan geido / markski</a><br />
+					desarrollado por <a href="https://markski.ar" target="_blank" rel="noopener noreferrer" className={styles.text_accent_subtle}>markski</a><br />
 					aplicación de código abierto. <a href="https://github.com/markski1/Calculadoras" target="_blank" rel="noopener noreferrer" className={styles.text_accent_subtle}>ver en github</a><br />
-				</p>
-				<p>
-					<Link href="colaborar" className={styles.text_accent_subtle}>colaborar con calculando argentina</Link>
 				</p>
 			</footer>
 		</>

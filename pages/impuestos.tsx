@@ -215,9 +215,6 @@ export default function Impuestos() {
                                     Las calculadoras en esta pagina son 100% gratuitas.
                                 </p>
                                 <p>
-                                    Si queres, podes <Link href="colaborar" className={styles.text_accent_subtle}>colaborar con su mantenimiento</Link>.
-                                </p>
-                                <p>
                                     Si encontras algun error o tenes sugerencias, podes contactarme por los metodos listados en mi <a href="https://markski.ar" className={styles.text_accent_subtle}>web personal</a>.
                                 </p>
                             </small>
