@@ -11,7 +11,6 @@ export default function Impuestos() {
 	const provincePercentage = [0.0, 0.02, 0.055, 0.03, 0.01, 0.03, 0.05, 0.036, 0.0];
 
     const afipPercentage = 30;
-    const paisPercentage = 8;
     const digitalServicePercent = 21;
 
     // input states
@@ -26,7 +25,6 @@ export default function Impuestos() {
     const [totalTaxes, setTotalTaxes] = useState(0);
     const [digitalServiceTaxDisplay, setDigitalServiceTaxDisplay] = useState(0);
     const [perceptionTaxDisplay, setPerceptionTaxDisplay] = useState(0);
-    const [paisTaxDisplay, setPaisTaxDisplay] = useState(0);
     const [provinceTaxDisplay, setProvinceTaxDisplay] = useState(0);
     const [provincePercent, setProvincePercent] = useState(0);
 
@@ -73,19 +71,17 @@ export default function Impuestos() {
         }
         
         let AFIP = workingAmount * (afipPercentage * 0.01);
-        let PAIS = workingAmount * (paisPercentage * 0.01);
         let provincePercent = 0.0;
         
         if (province > 0) {
             provincePercent = workingAmount * provincePercentage[province];
         }
         
-        let workingTotalTaxes = AFIP + PAIS + provincePercent + digitalServiceTax;
+        let workingTotalTaxes = AFIP + provincePercent + digitalServiceTax;
 
         setPerceptionTaxDisplay(AFIP);
         setProvinceTaxDisplay(provincePercent);
         setDigitalServiceTaxDisplay(digitalServiceTax);
-        setPaisTaxDisplay(PAIS);
         setProvincePercent(provincePercentage[province] * 100);
         
         setTotalTaxes(workingTotalTaxes);
@@ -190,7 +186,6 @@ export default function Impuestos() {
                                     <ul>
                                         <li>IVA Servicios Digitales {parseToPesos(digitalServiceTaxDisplay)} <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
                                         <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(30%)</b></li>
-                                        <li>Ley impuesto PAIS {parseToPesos(paisTaxDisplay)} <b>(8%)</b></li>
                                         <li>Impuestos provinciales {parseToPesos(provinceTaxDisplay)} <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
                                 </small>
