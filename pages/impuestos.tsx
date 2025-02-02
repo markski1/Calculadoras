@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
-import Link from 'next/link';
 import Layout from '../components/layout';
 import PageHeader from '../components/atoms/PageHeader';
 
@@ -30,12 +29,12 @@ export default function Impuestos() {
 
     async function fetchCurrencies() {
         const response = await fetch("https://snep.markski.ar/monedas.php");
-        const data = await response.json();
-        setCurrencies(data);
+        return await response.json();
     }
 
     useEffect(() => {
-        fetchCurrencies();
+        let data = fetchCurrencies();
+        data.then(x => setCurrencies(x))
     }, []);
 
     useEffect(() => {

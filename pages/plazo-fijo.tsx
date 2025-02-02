@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
-import Link from 'next/link';
 import Layout from '../components/layout';
 import PageHeader from '../components/atoms/PageHeader';
 

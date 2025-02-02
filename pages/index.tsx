@@ -17,11 +17,6 @@ export default function Home() {
                     <p>Calculo de impuestos para pagos con tarjeta hacia el exterior, con convertor de divisas.</p>
                 </Link>
 
-                <Link href="sueldo" className={styles.card}>
-                    <h3>Sueldo en mano</h3>
-                    <p>Calculo de sueldo bruto a sueldo neto, con varias opciones y consideraciones.</p>
-                </Link>
-
                 <Link href="plazo-fijo" className={styles.card}>
                     <h3>Plazo fijo</h3>
                     <p>Calculo de rendimiento de plazo fijo, dando capital, interes y dias.</p>

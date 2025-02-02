@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
-import Link from 'next/link';
 import Layout from '../components/layout';
 import PageHeader from '../components/atoms/PageHeader';
 
@@ -67,14 +66,14 @@ export default function Cuenta() {
         for (let person of payTheOthers) {
             let nameGetsPaid = "";
 
-            // Of those who footed the bill, see if the payment fits for any of them them
+            // Of those who footed the bill, see if the payment fits for any of them.
             for (let element of payDirectly) {
                 if (element.needsGetPaid >= person.spent) {
                     nameGetsPaid = element.name;
                     element.needsGetPaid -= person.spent;
                     break;
                 }
-            };
+            }
             // sort per run so that, for the next person, highest footer gets evaluated first.
             payDirectly.sort((a, b) => b.needsGetPaid - a.needsGetPaid);
                     
@@ -87,7 +86,7 @@ export default function Cuenta() {
                 // worst scenario: payment must be divided
                 roundTwoPayments.push(person);
             }
-		};
+		}
 
         // payment divisions, if needed
         if (roundTwoPayments.length > 0) {
@@ -116,7 +115,7 @@ export default function Cuenta() {
                         hasToPay -= paysThisPerson;
                         paymentObj.push(<span>{parseToPesos(paysThisPerson, false)} a {footer.name} </span>);
                     }
-                };
+                }
 
                 output.push(<hr />);
                 output.push(<p key={person.id}>{person.name} debe dividir su pago: {paymentObj}</p>);
@@ -155,10 +154,6 @@ export default function Cuenta() {
 			</span>
 		);
 	}
-
-    function truncateNum(perc: number) {
-        return perc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
 
     return (
         <>
