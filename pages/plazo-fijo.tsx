@@ -23,10 +23,6 @@ export default function PlazoFijo() {
         let yearlyEarning = amount * (interestRate * 0.01);
         let dailyEarning = yearlyEarning / 365;
 
-        console.log("Yearly: " + yearlyEarning);
-        console.log("Daily: " + yearlyEarning);
-        console.log("Days: " + days);
-
         let periodEarning = dailyEarning * days;
        
         setDisplayDaily(dailyEarning);

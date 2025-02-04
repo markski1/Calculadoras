@@ -1,12 +1,3 @@
-.container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .title a {
   color: #0070f3;
   text-decoration: none;
@@ -17,24 +8,6 @@
 .title a:active {
   text-decoration: underline;
 }
-
-.title {
-  margin: 3rem 0 0;
-  line-height: 1;
-  font-size: 3rem;
-}
-
-.title,
-.description {
-  text-align: center;
-}
-
-
-.description {
-  line-height: 1.5;
-  font-size: 1.25rem;
-}
-
 
 .card {
   margin: 1rem;
@@ -75,10 +48,6 @@
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
-}
-
-.logo {
-  height: 1em;
 }
 
 .text_accent {
@@ -134,8 +103,7 @@
   vertical-align: middle;
   font-size: 1.2rem;
   min-width: 15rem;
-  padding: .8rem;
-  padding-left: 1rem;
+  padding: .8rem .8rem .8rem 1rem;
   transition: 0.3s;
 }
 
@@ -189,14 +157,4 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.toMargin {
-  text-align: left;
-}
-
-.alert {
-  background-color: #FF000011;
-  padding: .2rem 1rem 1rem;
-  border-radius: 8px;
 }
