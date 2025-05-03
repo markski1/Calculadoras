@@ -21,6 +21,7 @@ export default function Impuestos() {
     // display states
     const [displayAmount, setDisplayAmount] = useState(0);
     const [total, setTotal] = useState(0);
+    const [alternateTotal, setAlternateTotal] = useState(0);
     const [totalTaxes, setTotalTaxes] = useState(0);
     const [digitalServiceTaxDisplay, setDigitalServiceTaxDisplay] = useState(0);
     const [perceptionTaxDisplay, setPerceptionTaxDisplay] = useState(0);
@@ -69,16 +70,16 @@ export default function Impuestos() {
             document.getElementById("tdf-alert").style.display = 'none';
         }
         
-        let AFIP = workingAmount * (afipPercentage * 0.01);
+        let perceptionTax = workingAmount * (afipPercentage * 0.01);
         let provincePercent = 0.0;
         
         if (province > 0) {
             provincePercent = workingAmount * provincePercentage[province];
         }
         
-        let workingTotalTaxes = AFIP + provincePercent + digitalServiceTax;
+        let workingTotalTaxes = provincePercent + digitalServiceTax;
 
-        setPerceptionTaxDisplay(AFIP);
+        setPerceptionTaxDisplay(perceptionTax);
         setProvinceTaxDisplay(provincePercent);
         setDigitalServiceTaxDisplay(digitalServiceTax);
         setProvincePercent(provincePercentage[province] * 100);
@@ -86,6 +87,7 @@ export default function Impuestos() {
         setTotalTaxes(workingTotalTaxes);
         setDisplayAmount(workingAmount);
         setTotal(workingAmount + workingTotalTaxes);
+        setAlternateTotal(workingAmount + workingTotalTaxes + perceptionTax)
     }, [amount, currency, province]);
 
     function updateAmount() {
@@ -175,7 +177,7 @@ export default function Impuestos() {
                             </div>
                         </div>
                         <div className={styles.flexBox}>
-                            <h2 style={{textAlign: 'center'}}>Total: {parseToPesos(total)}</h2>
+                            <h2 style={{textAlign: 'center'}}>Total: {parseToPesos(total)}*</h2>
                             <div>
                                 <p>
                                     En la compra: {parseToPesos(displayAmount)}<br />
@@ -184,9 +186,13 @@ export default function Impuestos() {
                                 <small>
                                     <ul>
                                         <li>IVA Servicios Digitales {parseToPesos(digitalServiceTaxDisplay)} <b>(21%)</b> <span id="tdf-alert" style={{display: 'none'}}>* Tiera del Fuego no lo paga</span></li>
-                                        <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(30%)</b></li>
                                         <li>Impuestos provinciales {parseToPesos(provinceTaxDisplay)} <b>(<span id="impuestlol">{provincePercent}</span>%)</b></li>
                                     </ul>
+                                    <p>* Para ciertos gastos, puede aplicar la siguiente percepción.</p>
+                                    <ul>
+                                        <li>Percepción RG AFIP 4815 {parseToPesos(perceptionTaxDisplay)} <b>(30%)</b></li>
+                                    </ul>
+                                    <p>En cuyo caso, el total será {parseToPesos(alternateTotal)}</p>
                                 </small>
                             </div>
                         </div>
