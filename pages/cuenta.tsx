@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '../styles/Custom.module.css';
 import HeadParams from '../components/atoms/HeadParams';
 import Layout from '../components/layout';
@@ -130,17 +130,22 @@ export default function Cuenta() {
         let personSpent = parseInt((document.getElementById('spent') as HTMLInputElement).value);
         let personPays = (document.getElementById('pays') as HTMLInputElement).checked;
 
-        if (personName.length < 1) return false;
-        if (personSpent < 1) return false;
+        if (personName.length < 1) {
+            window.alert("Toda persona debe tener un nombre.");
+            (document.getElementById('name') as HTMLInputElement).focus();
+            return false;
+        }
+        if (personSpent < 1) {
+            window.alert("Para este tipo de calculadora, toda persona debe haber gastado.");
+            (document.getElementById('spent') as HTMLInputElement).focus();
+            return false;
+        }
 
-        let newList = peopleList;
-        newList.push({ name: personName, spent: personSpent, pays: personPays, id: peopleList.length });
+        let newList = [...peopleList, { name: personName, spent: personSpent, pays: personPays, id: peopleList.length }];
         setPeopleList(newList);
 
         (document.getElementById('personForm') as HTMLFormElement).reset();
         (document.getElementById('name') as HTMLInputElement).focus();
-
-        calculate();
 
         return true;
     }
@@ -155,11 +160,15 @@ export default function Cuenta() {
 		);
 	}
 
+    useEffect(() => {
+      calculate();
+    }, [peopleList]);
+
     return (
         <>
             <HeadParams
-                title = "Calculadora división de cuenta"
-                description = "Agrega cuanto gasto cada uno y quien paga la cuenta, y mira cuanto le tiene que dar cada uno al que pago. Restaurants, Cafes, Pedidos, etc..."
+                title = "Calculadora división de gastos"
+                description = "Agrega cuanto gasto cada uno y mira como distribuir los pagos. Util para asados."
                 />
 
             <Layout>
@@ -189,14 +198,6 @@ export default function Cuenta() {
                                         title="Numero con no mas de 2 decimales."
                                         />
                                 </label>
-                                <label><p>
-                                    <input 
-                                        id="pays" type="checkbox" 
-                                        className={styles.checkbox} 
-                                        title="Indica si esta persona paga o no la cuenta."
-                                        />
-                                    Paga la cuenta
-                                </p></label>
                                 <input type="submit" onClick={() => { addPerson(); } } value="Agregar persona" className={styles.input} />
                             </form>
                         </div>
@@ -210,13 +211,13 @@ export default function Cuenta() {
                             <p className={styles.smallHeader}>Instrucciones</p>
                             <small>
                                 <p>
-                                    Esta calculadora es util para dividir gastos a la hora de pedir comida o pagar una cuenta.
+                                    La idea de esta calculadora es para casos donde en un bar o restaurante solo una o algunas personas pagan la cuenta directamente y el resto les paga a ellos. Sencillamente indicar el gasto de cada persona e indicar cuales pagan la cuenta.
                                 </p>
                                 <p>
-                                    Sensillamente agrega persona por persona cuanto gasto cada uno. A quienes pagan la cuenta directamente, marca el campo "Paga la cuenta".
+                                    Esta calculadora <i>no</i> es para casos donde ya se realizaron gastos y se quiere que todos paguen lo mismo (como por ejemplo un asado).
                                 </p>
                                 <p>
-                                    La cuenta total se divide entre ellas, y a las demas se les dira cuanto le tienen que dar a los que pagaron.
+                                    Una "calculadora para asados" se agregara pronto.
                                 </p>
                             </small>
                         </div>
