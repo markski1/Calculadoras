@@ -6,122 +6,89 @@ import PageHeader from '../components/atoms/PageHeader';
 
 export default function Cuenta() {
     // display states
-    const [displayPeople, setDisplayPeople] = useState( [ <p key={0}>Se mostrara cuando se agreguen 3 personas</p> ] );
+    const [displayPeople, setDisplayPeople] = useState( [ <p key={0}>Se mostrara cuando se agreguen 2 personas</p> ] );
     const [peopleList, setPeopleList] = useState( [] );
 
     function calculate() {
-        if (peopleList.length < 3) {
-            setDisplayPeople( [ <p key={0}>Se mostrara cuando se agreguen {3 - peopleList.length} personas</p> ] );
+        if (peopleList.length < 2) {
+            setDisplayPeople( [ <p key={0}>Se mostrara cuando se agreguen {2 - peopleList.length} personas</p> ] );
             return;
         }
 
-        let payDirectly = [];
-        let payTheOthers = [];
-        let totalSpentAmount = 0;
-
-        // how much money must be received by those who do pay directly
-        let toBeReceived = 0;
-
-        // First pass: Separate those who pay directly and who don't.
+        // total paid by everyone
+        let totalPaid = 0;
         peopleList.forEach(person => {
-            if (person.pays) {
-                payDirectly.push( {name: person.name, spent: person.spent, needsGetPaid: 0} );
-                toBeReceived -= person.spent; // this person pays their own bill
-            }
-            else {
-                payTheOthers.push( {name: person.name, spent: person.spent} );
-            }
-            totalSpentAmount += person.spent;
+            totalPaid += person.spent;
         });
 
-        // add the total to this variable, to which the payments of the footers was already substracted above.
-        toBeReceived += totalSpentAmount;
+        // how much should be paid if everyone paid equally
+        const equalShare = totalPaid / peopleList.length;
 
-        // How much each who pays directly will pay.
-        let payAmount:number;
-        
-        if (payDirectly.length > 0) {
-            payAmount = totalSpentAmount / payDirectly.length;
-        }
-        else {
-            // if no direct payers were added yet, can't calculate.
-            setDisplayPeople( [ <p key={0}>Se mostrara cuando se agregue al menos una persona que pague la cuenta</p> ] );
+        // people who paid more or less
+        type Creditor = { name: string; needsToReceive: number };
+        type Debtor = { name: string; needsToPay: number };
+
+        const creditors: Creditor[] = [];
+        const debtors: Debtor[] = [];
+
+        peopleList.forEach(person => {
+            const diff = person.spent - equalShare;
+
+            if (diff > 0.01) {
+                // paid more
+                creditors.push({ name: person.name, needsToReceive: diff });
+            } else if (diff < -0.01) {
+                // paid less
+                debtors.push({ name: person.name, needsToPay: -diff });
+            }
+        });
+
+        // order to keep algo stable
+        creditors.sort((a, b) => b.needsToReceive - a.needsToReceive);
+        debtors.sort((a, b) => b.needsToPay - a.needsToPay);
+
+        const output = [
+            (<p key="total">Total: {parseToPesos(totalPaid, false)}</p>),
+            (<p key="share">Cada uno deberia pagar: {parseToPesos(equalShare, false)}</p>)
+        ];
+
+        // if everyone paid just about the same
+        if (creditors.length === 0 && debtors.length === 0) {
+            output.push(<hr key="hr-equal" />);
+            output.push(<p key="all-even">Todos ya pagaron lo que corresponde. No hacen falta transferencias.</p>);
+            setDisplayPeople(output);
             return;
         }
 
-        // start result output with the total. 
-        let output = [ (<p>Total: {parseToPesos(totalSpentAmount, false)}</p>) ];
+        // calc who pays who
+        let transferKey = 0;
 
-        // Print how much footers must pay.
-        payDirectly.forEach(person => {
-            output.push(<hr />);
-			output.push(<p key={person.id}>{person.name} paga {parseToPesos(payAmount, false)} directamente</p>);
-            person.needsGetPaid = payAmount - person.spent;
-		});
+        let cIndex = 0;
+        let dIndex = 0;
 
-        // this array will contain people who cannot pay whole amounts to a single footer.
-        let roundTwoPayments = [];
+        while (cIndex < creditors.length && dIndex < debtors.length) {
+            const creditor = creditors[cIndex];
+            const debtor = debtors[dIndex];
 
-        // Now, for everyone who must get paid
-        for (let person of payTheOthers) {
-            let nameGetsPaid = "";
+            const amount = Math.min(creditor.needsToReceive, debtor.needsToPay);
 
-            // Of those who footed the bill, see if the payment fits for any of them.
-            for (let element of payDirectly) {
-                if (element.needsGetPaid >= person.spent) {
-                    nameGetsPaid = element.name;
-                    element.needsGetPaid -= person.spent;
-                    break;
-                }
+            if (amount > 0.01) {
+                output.push(<hr key={`hr-${transferKey}`} />);
+                output.push(
+                    <p key={`t-${transferKey}`}>
+                        {debtor.name} le paga {parseToPesos(amount, false)} a {creditor.name}
+                    </p>
+                );
+                transferKey++;
+
+                creditor.needsToReceive -= amount;
+                debtor.needsToPay -= amount;
             }
-            // sort per run so that, for the next person, highest footer gets evaluated first.
-            payDirectly.sort((a, b) => b.needsGetPaid - a.needsGetPaid);
-                    
-            // best scenario: they can pay it all to a single person.
-            if (nameGetsPaid.length >= 1) {
-                output.push(<hr />);
-                output.push(<p key={person.id}>{person.name} le paga {parseToPesos(person.spent, false)} a {nameGetsPaid}</p>);
-            }
-            else {
-                // worst scenario: payment must be divided
-                roundTwoPayments.push(person);
-            }
-		}
 
-        // payment divisions, if needed
-        if (roundTwoPayments.length > 0) {
-            for (let person of roundTwoPayments) {
-                let paymentObj = [ ];
-
-                // how much the person has to pay.
-                // separate variable as this will get substracted each part of a payment.
-                let hasToPay = person.spent;
-
-                // again, go through all the footers, see how much they have to get paid.
-                for (let footer of payDirectly) {
-                    // if this footer needs to be paid, and the person hasn't completed the payments yet
-                    if (footer.needsGetPaid > 0 && hasToPay > 0) {
-                        let paysThisPerson = 0;
-
-                        if (hasToPay > footer.needsGetPaid) {
-                            paysThisPerson = footer.needsGetPaid;
-                            footer.needsGetPaid = 0;
-                        }
-                        else {
-                            paysThisPerson = hasToPay;
-                            footer.needsGetPaid -= hasToPay;
-                        }
-
-                        hasToPay -= paysThisPerson;
-                        paymentObj.push(<span>{parseToPesos(paysThisPerson, false)} a {footer.name} </span>);
-                    }
-                }
-
-                output.push(<hr />);
-                output.push(<p key={person.id}>{person.name} debe dividir su pago: {paymentObj}</p>);
-            }
+            if (creditor.needsToReceive <= 0.01) cIndex++;
+            if (debtor.needsToPay <= 0.01) dIndex++;
         }
-        
+
         setDisplayPeople(output);
     }
 
@@ -168,9 +135,8 @@ export default function Cuenta() {
         <>
             <HeadParams
                 title = "Calculadora división de gastos"
-                description = "Agrega cuanto gasto cada uno y mira como distribuir los pagos. Util para asados."
+                description = "Agrega cuanto pago cada uno y mira como distribuir los pagos para que todos paguen lo mismo."
                 />
-
             <Layout>
                 <div className={styles.siteContainer}>
                     <PageHeader>
@@ -186,16 +152,16 @@ export default function Cuenta() {
                                         id="name" type="text" placeholder="Ingresar nombre"
                                         min={0}
                                         className={styles.input} 
-                                        title="Numero con no mas de 2 decimales."
+                                        title="Nombre de la persona."
                                         />
                                 </label>
                                 <label>
-                                    Gasto de persona
+                                    Monto que pago la persona
                                     <input 
                                         id="spent" type="number" placeholder="Sin coma ni puntos" step="1" 
                                         min={0}
                                         className={styles.input} 
-                                        title="Numero con no mas de 2 decimales."
+                                        title="Monto que pago esta persona."
                                         />
                                 </label>
                                 <input type="submit" onClick={() => { addPerson(); } } value="Agregar persona" className={styles.input} />
@@ -211,13 +177,10 @@ export default function Cuenta() {
                             <p className={styles.smallHeader}>Instrucciones</p>
                             <small>
                                 <p>
-                                    La idea de esta calculadora es para casos donde en un bar o restaurante solo una o algunas personas pagan la cuenta directamente y el resto les paga a ellos. Sencillamente indicar el gasto de cada persona e indicar cuales pagan la cuenta.
+                                    La idea de esta calculadora es para casos donde varias personas pagan cosas de una salida (por ejemplo, restaurante o bar) y luego quieren dividir todo para que cada uno termine pagando lo mismo.
                                 </p>
                                 <p>
-                                    Esta calculadora <i>no</i> es para casos donde ya se realizaron gastos y se quiere que todos paguen lo mismo (como por ejemplo un asado).
-                                </p>
-                                <p>
-                                    Una "calculadora para asados" se agregara pronto.
+                                    Indicá cuánto pagó cada persona. La calculadora te dirá quién le tiene que pagar a quién y cuánto.
                                 </p>
                             </small>
                         </div>
