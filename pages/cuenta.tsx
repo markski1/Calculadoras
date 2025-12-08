@@ -66,6 +66,8 @@ export default function Cuenta() {
         let cIndex = 0;
         let dIndex = 0;
 
+        output.push(<h4>Movimientos sugeridos</h4>);
+
         while (cIndex < creditors.length && dIndex < debtors.length) {
             const creditor = creditors[cIndex];
             const debtor = debtors[dIndex];
@@ -95,7 +97,6 @@ export default function Cuenta() {
     function addPerson() {
         let personName = (document.getElementById('name') as HTMLInputElement).value;
         let personSpent = parseInt((document.getElementById('spent') as HTMLInputElement).value);
-        let personPays = (document.getElementById('pays') as HTMLInputElement).checked;
 
         if (personName.length < 1) {
             window.alert("Toda persona debe tener un nombre.");
@@ -108,13 +109,19 @@ export default function Cuenta() {
             return false;
         }
 
-        let newList = [...peopleList, { name: personName, spent: personSpent, pays: personPays, id: peopleList.length }];
+        let newList = [...peopleList, { name: personName, spent: personSpent, id: peopleList.length }];
         setPeopleList(newList);
 
         (document.getElementById('personForm') as HTMLFormElement).reset();
         (document.getElementById('name') as HTMLInputElement).focus();
 
         return true;
+    }
+
+    function resetAll() {
+        setPeopleList([]);
+        setDisplayPeople([ <p key={0}>Se mostrara cuando se agreguen 2 personas</p> ]);
+        (document.getElementById('personForm') as HTMLFormElement)?.reset();
     }
 
     function parseToPesos(pesosAmount: number, cents: boolean = true) {
@@ -131,12 +138,17 @@ export default function Cuenta() {
       calculate();
     }, [peopleList]);
 
+    // calc resumed table
+    const totalPaid = peopleList.reduce((acc, p: any) => acc + p.spent, 0);
+    const equalShare = peopleList.length > 0 ? totalPaid / peopleList.length : 0;
+
     return (
         <>
             <HeadParams
                 title = "Calculadora división de gastos"
                 description = "Agrega cuanto pago cada uno y mira como distribuir los pagos para que todos paguen lo mismo."
                 />
+
             <Layout>
                 <div className={styles.siteContainer}>
                     <PageHeader>
@@ -148,27 +160,84 @@ export default function Cuenta() {
                                 <h3>Agregar persona</h3>
                                 <label>
                                     Nombre persona
-                                    <input 
+                                    <input
                                         id="name" type="text" placeholder="Ingresar nombre"
                                         min={0}
-                                        className={styles.input} 
+                                        className={styles.input}
                                         title="Nombre de la persona."
                                         />
                                 </label>
                                 <label>
                                     Monto que pago la persona
-                                    <input 
-                                        id="spent" type="number" placeholder="Sin coma ni puntos" step="1" 
+                                    <input
+                                        id="spent" type="number" placeholder="Sin coma ni puntos" step="1"
                                         min={0}
-                                        className={styles.input} 
+                                        className={styles.input}
                                         title="Monto que pago esta persona."
                                         />
                                 </label>
-                                <input type="submit" onClick={() => { addPerson(); } } value="Agregar persona" className={styles.input} />
+                                <input
+                                    type="submit"
+                                    onClick={() => { addPerson(); }}
+                                    value="Agregar persona"
+                                    className={styles.input}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={resetAll}
+                                    className={styles.input}
+                                    style={{ marginTop: '0.5rem' }}
+                                >
+                                    Resetear
+                                </button>
                             </form>
                         </div>
                         <div className={styles.flexBox}>
                             <h2 style={{textAlign: 'center'}}>Resultado</h2>
+
+                            {peopleList.length > 0 && (
+                                <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+                                        <thead>
+                                            <tr>
+                                                <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc', padding: '0.25rem' }}>Persona</th>
+                                                <th style={{ textAlign: 'right', borderBottom: '1px solid #ccc', padding: '0.25rem' }}>Pagó</th>
+                                                <th style={{ textAlign: 'right', borderBottom: '1px solid #ccc', padding: '0.25rem' }}>Debería pagar</th>
+                                                <th style={{ textAlign: 'right', borderBottom: '1px solid #ccc', padding: '0.25rem' }}>Diferencia</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {peopleList.map((person: any) => {
+                                                const diff = person.spent - equalShare;
+                                                let label = 'Está equilibrado';
+                                                if (diff > 0.01) label = 'Debe recibir';
+                                                else if (diff < -0.01) label = 'Debe pagar';
+
+                                                return (
+                                                    <tr key={person.id}>
+                                                        <td style={{ padding: '0.25rem' }}>{person.name}</td>
+                                                        <td style={{ padding: '0.25rem', textAlign: 'right' }}>
+                                                            {parseToPesos(person.spent, false)}
+                                                        </td>
+                                                        <td style={{ padding: '0.25rem', textAlign: 'right' }}>
+                                                            {parseToPesos(equalShare || 0, false)}
+                                                        </td>
+                                                        <td style={{ padding: '0.25rem', textAlign: 'right' }}>
+                                                            {label !== 'Está equilibrado' && (
+                                                                <>
+                                                                    {label}: {parseToPesos(Math.abs(diff), false)}
+                                                                </>
+                                                            )}
+                                                            {label === 'Está equilibrado' && label}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+
                             <div>
                                 {displayPeople}
                             </div>
@@ -198,6 +267,5 @@ export default function Cuenta() {
                     </div>
                 </div>
             </Layout>
-        </>
-    )
-}
+        </>)
+    }
