@@ -7,7 +7,9 @@ import PageHeader from '../components/atoms/PageHeader';
 export default function Cuenta() {
     // display states
     const [displayPeople, setDisplayPeople] = useState( [ <p key={0}>Se mostrara cuando se agreguen 2 personas</p> ] );
-    const [peopleList, setPeopleList] = useState( [] );
+
+    type Person = { id: number; name: string; spent: number };
+    const [peopleList, setPeopleList] = useState<Person[]>([]);
 
     function calculate() {
         if (peopleList.length < 2) {
@@ -66,7 +68,7 @@ export default function Cuenta() {
         let cIndex = 0;
         let dIndex = 0;
 
-        output.push(<h4>Movimientos sugeridos</h4>);
+        output.push(<h4 key="movimientos-header">Movimientos sugeridos</h4>);
 
         while (cIndex < creditors.length && dIndex < debtors.length) {
             const creditor = creditors[cIndex];
@@ -95,25 +97,35 @@ export default function Cuenta() {
     }
 
     function addPerson() {
-        let personName = (document.getElementById('name') as HTMLInputElement).value;
-        let personSpent = parseInt((document.getElementById('spent') as HTMLInputElement).value);
+        const nameInput = document.getElementById('name') as HTMLInputElement;
+        const spentInput = document.getElementById('spent') as HTMLInputElement;
 
-        if (personName.length < 1) {
+        const personName = nameInput.value.trim();
+        const personSpent = parseInt(spentInput.value, 10);
+
+        if (!personName) {
             window.alert("Toda persona debe tener un nombre.");
-            (document.getElementById('name') as HTMLInputElement).focus();
+            nameInput.focus();
             return false;
         }
+
+        if (Number.isNaN(personSpent)) {
+            window.alert("El monto ingresado no es válido.");
+            spentInput.focus();
+            return false;
+        }
+
         if (personSpent < 1) {
             window.alert("Para este tipo de calculadora, toda persona debe haber gastado.");
-            (document.getElementById('spent') as HTMLInputElement).focus();
+            spentInput.focus();
             return false;
         }
 
-        let newList = [...peopleList, { name: personName, spent: personSpent, id: peopleList.length }];
+        const newList = [...peopleList, { name: personName, spent: personSpent, id: peopleList.length }];
         setPeopleList(newList);
 
         (document.getElementById('personForm') as HTMLFormElement).reset();
-        (document.getElementById('name') as HTMLInputElement).focus();
+        nameInput.focus();
 
         return true;
     }
